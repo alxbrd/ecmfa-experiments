@@ -15,6 +15,7 @@ import uk.ac.kcl.MDEOptimiseStandaloneSetup
 import uk.ac.kcl.mdeoptimise.Optimisation
 import uk.ac.kcl.interpreter.OptimisationInterpreter
 import org.sidiff.common.logging.LogUtil
+import java.util.TimeZone
 
 class RunOptimisation {
 
@@ -23,6 +24,7 @@ class RunOptimisation {
 	def static void main(String[] args) {
 		val app = injector.getInstance(RunOptimisation)
 		
+		//Disable SERGe notifications
 		LogUtil.logEvents = "MESSAGE,WARNING,ERROR"
 		
 		if (args.empty) {
@@ -67,24 +69,24 @@ class RunOptimisation {
 	 */
 	static val optSpecs = #["cra"]
 	static val inputModels = #[
-		new InputModelDesc("TTC_InputRDG_A", 100, 50), 
-		new InputModelDesc("TTC_InputRDG_B", 100, 50),
-		new InputModelDesc("TTC_InputRDG_C", 100, 50),
-		new InputModelDesc("TTC_InputRDG_D", 100, 50),
-		new InputModelDesc("TTC_InputRDG_E", 100, 50),
-		
-		new InputModelDesc("TTC_InputRDG_A", 100, 100),
-		new InputModelDesc("TTC_InputRDG_B", 100, 100),
- 		new InputModelDesc("TTC_InputRDG_C", 100, 100),
-		new InputModelDesc("TTC_InputRDG_D", 100, 100),
-		new InputModelDesc("TTC_InputRDG_E", 100, 100),
-			
-		new InputModelDesc("TTC_InputRDG_A", 1000, 100),
-		new InputModelDesc("TTC_InputRDG_B", 1000, 100),
-		new InputModelDesc("TTC_InputRDG_C", 1000, 100),
-		new InputModelDesc("TTC_InputRDG_D", 1000, 100),
-		new InputModelDesc("TTC_InputRDG_E", 1000, 100)
-		
+//		new InputModelDesc("TTC_InputRDG_A", 100, 50), 
+//		new InputModelDesc("TTC_InputRDG_B", 100, 50),
+//		new InputModelDesc("TTC_InputRDG_C", 500, 50),
+		new InputModelDesc("TTC_InputRDG_D", 1000, 50),
+		new InputModelDesc("TTC_InputRDG_E", 2000, 50)
+//		
+//		new InputModelDesc("TTC_InputRDG_A", 100, 100),
+//		new InputModelDesc("TTC_InputRDG_B", 100, 100),
+// 		new InputModelDesc("TTC_InputRDG_C", 100, 100),
+//		new InputModelDesc("TTC_InputRDG_D", 100, 100),
+//		new InputModelDesc("TTC_InputRDG_E", 100, 100),
+//			
+//		new InputModelDesc("TTC_InputRDG_A", 1000, 100),
+//		new InputModelDesc("TTC_InputRDG_B", 1000, 100),
+//		new InputModelDesc("TTC_InputRDG_C", 1000, 100),
+//		new InputModelDesc("TTC_InputRDG_D", 1000, 100),
+//		new InputModelDesc("TTC_InputRDG_E", 1000, 100)
+//		
 		]
 
 	/**
@@ -107,10 +109,19 @@ class RunOptimisation {
 	def runBatchForSpecAndModel(String optSpec, InputModelDesc inputDesc, String batchStartTime, int batchId) {
 		val lResults = new LinkedList<ResultRecord>()
 
-		(0 ..< 10).forEach [ idx |
+		(0 ..< 2).forEach [ idx |
 			lResults.add(runOneExperiment(optSpec, inputDesc, batchStartTime, batchId, idx))
 		]
 
+		val averageTimeMiliseconds = lResults.fold(0.0, [acc, r|acc + r.timeTaken]) / lResults.size
+		
+		// New date object from millis
+		var date = new Date(averageTimeMiliseconds.longValue); // if you really have long
+		var formatter = new SimpleDateFormat("HH:mm:ss.SSS");
+		formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+		var result = formatter.format(date.getTime()) ;
+		
+		
 		// Write averaged results for this specification and model
 		val File f = new File(
 			"gen/models/ttc/" + optSpec + "/" + batchStartTime + "/" + inputDesc.modelName + "-configuration-" + batchId + "/overall_results.txt")
@@ -122,8 +133,7 @@ class RunOptimisation {
 		pw.printf("Running for %01d generations with a population size of %01d.\n", inputDesc.generations,
 			inputDesc.populationSize)
 		pw.println
-		pw.printf("Average time taken: %02f milliseconds.\n",
-			lResults.fold(0.0, [acc, r|acc + r.timeTaken]) / lResults.size)
+		pw.printf("Average time taken: %02f milliseconds (%s).\n", averageTimeMiliseconds, result)
 		val bestResult = lResults.maxBy[maxCRA]
 		
 		if(bestResult.bestModelPath == null){
@@ -207,7 +217,12 @@ class RunOptimisation {
 		val featureCounter = new MinimiseClasslessFeatures
 
 		results.timeTaken = totalTime / 1000000
-
+		var date = new Date(results.timeTaken.longValue); // if you really have long
+		var formatter = new SimpleDateFormat("HH:mm:ss.SSS");
+		formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+		var result = formatter.format(date.getTime()) ;
+		
+		
 		val sortedResults = optimiserOutcome.toList().filter [ m | featureCounter.computeFitness(m) == 0].map [ m |
 			new Pair<EObject, Double>(m, craComputer.computeFitness(m) * -1)].sortBy[-value]
 
@@ -225,7 +240,7 @@ class RunOptimisation {
 			pw.printf(
 				"Experiment using spec \"%s\" and model \"%s\". Running for %01d generations with a population size of %01d.\n\n",
 				optSpecName, inputDesc.modelName, inputDesc.generations, inputDesc.populationSize)
-			pw.printf("Total time taken for this experiment: %02f milliseconds.\n", results.timeTaken)
+			pw.printf("Total time taken for this experiment: %02f milliseconds (%s).\n", results.timeTaken, result)
 			sortedResults.forEach [ p |
 				pw.printf("Result model %08X at CRA %02f.\n", p.key.hashCode, p.value)
 			]
