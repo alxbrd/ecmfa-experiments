@@ -26,7 +26,6 @@ class ModelLoadHelper {
 
 	def loadModel(String path) {
 		val Resource resource = resourceSet.getResource(URI.createURI(path), true)
-
 		resource.contents.head
 	}
 

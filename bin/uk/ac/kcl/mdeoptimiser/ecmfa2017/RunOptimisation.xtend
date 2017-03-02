@@ -14,6 +14,7 @@ import java.util.stream.Collectors
 import uk.ac.kcl.MDEOptimiseStandaloneSetup
 import uk.ac.kcl.mdeoptimise.Optimisation
 import uk.ac.kcl.interpreter.OptimisationInterpreter
+import org.sidiff.common.logging.LogUtil
 
 class RunOptimisation {
 
@@ -21,7 +22,9 @@ class RunOptimisation {
 	
 	def static void main(String[] args) {
 		val app = injector.getInstance(RunOptimisation)
-
+		
+		LogUtil.logEvents = "MESSAGE,WARNING,ERROR"
+		
 		if (args.empty) {
 			// Run all experiments
 			app.run()
@@ -29,8 +32,10 @@ class RunOptimisation {
 			// Expect two numerical arguments specifying the index of the spec and the index of the model, resp.
 			val specIdx = Integer.parseInt(args.get(0))
 			val modelIdx = Integer.parseInt(args.get(1))
-
-			app.runBatchForSpecAndModel(optSpecs.get(specIdx), inputModels.get(modelIdx))
+			
+			val batchStartTime = new SimpleDateFormat("yyMMdd-HHmmss").format(new Date())
+		
+			app.runBatchForSpecAndModel(optSpecs.get(specIdx), inputModels.get(modelIdx), batchStartTime, 0)
 		}
 	}
 
@@ -62,7 +67,7 @@ class RunOptimisation {
 	 */
 	static val optSpecs = #["cra"]
 	static val inputModels = #[
-		new InputModelDesc("TTC_InputRDG_A", 100, 10), 
+		new InputModelDesc("TTC_InputRDG_A", 100, 50), 
 		new InputModelDesc("TTC_InputRDG_B", 100, 50),
 		new InputModelDesc("TTC_InputRDG_C", 100, 50),
 		new InputModelDesc("TTC_InputRDG_D", 100, 50),
@@ -74,17 +79,11 @@ class RunOptimisation {
 		new InputModelDesc("TTC_InputRDG_D", 100, 100),
 		new InputModelDesc("TTC_InputRDG_E", 100, 100),
 			
-		new InputModelDesc("TTC_InputRDG_A", 100, 100),
-		new InputModelDesc("TTC_InputRDG_B", 100, 100),
-		new InputModelDesc("TTC_InputRDG_C", 100, 100),
-		new InputModelDesc("TTC_InputRDG_D", 100, 100),
-		new InputModelDesc("TTC_InputRDG_E", 100, 100),
-		
-		new InputModelDesc("TTC_InputRDG_A", 50, 20),
-		new InputModelDesc("TTC_InputRDG_B", 50, 20), 
-		new InputModelDesc("TTC_InputRDG_C", 50, 20),
-		new InputModelDesc("TTC_InputRDG_D", 50, 20), 
-		new InputModelDesc("TTC_InputRDG_E", 50, 20)
+		new InputModelDesc("TTC_InputRDG_A", 1000, 100),
+		new InputModelDesc("TTC_InputRDG_B", 1000, 100),
+		new InputModelDesc("TTC_InputRDG_C", 1000, 100),
+		new InputModelDesc("TTC_InputRDG_D", 1000, 100),
+		new InputModelDesc("TTC_InputRDG_E", 1000, 100)
 		
 		]
 
@@ -92,9 +91,12 @@ class RunOptimisation {
 	 * Run all experiments
 	 */
 	def run() {
+
+		val batchStartTime = new SimpleDateFormat("yyMMdd-HHmmss").format(new Date())
+		
 		optSpecs.forEach [ optSpec |
-			inputModels.forEach [ inputDesc |
-				runBatchForSpecAndModel(optSpec, inputDesc)
+			inputModels.forEach [ inputDesc, index |
+				runBatchForSpecAndModel(optSpec, inputDesc, batchStartTime, index)
 			]
 		]
 	}
@@ -102,17 +104,16 @@ class RunOptimisation {
 	/**
 	 * Run a batch of experiments for the given spec and model, recording overall outcomes in a separate file.
 	 */
-	def runBatchForSpecAndModel(String optSpec, InputModelDesc inputDesc) {
+	def runBatchForSpecAndModel(String optSpec, InputModelDesc inputDesc, String batchStartTime, int batchId) {
 		val lResults = new LinkedList<ResultRecord>()
-		val batchStartTime = new SimpleDateFormat("yyMMdd-HHmmss").format(new Date())
-		
+
 		(0 ..< 10).forEach [ idx |
-			lResults.add(runOneExperiment(optSpec, inputDesc, batchStartTime, idx))
+			lResults.add(runOneExperiment(optSpec, inputDesc, batchStartTime, batchId, idx))
 		]
 
 		// Write averaged results for this specification and model
 		val File f = new File(
-			"gen/models/ttc/" + optSpec + "/" + batchStartTime + "/" + inputDesc.modelName + "/overall_results.txt")
+			"gen/models/ttc/" + optSpec + "/" + batchStartTime + "/" + inputDesc.modelName + "-configuration-" + batchId + "/overall_results.txt")
 		val PrintWriter pw = new PrintWriter(f)
 		pw.println("Overall results for this experiment")
 		pw.println("===================================")
@@ -124,19 +125,29 @@ class RunOptimisation {
 		pw.printf("Average time taken: %02f milliseconds.\n",
 			lResults.fold(0.0, [acc, r|acc + r.timeTaken]) / lResults.size)
 		val bestResult = lResults.maxBy[maxCRA]
-		pw.printf("Best CRA was %s for model with hash code %08X. This model was %s.\n", bestResult.maxCRA,
-			bestResult.bestModelHashCode, (if (bestResult.hasUnassignedFeatures) {
-				"invalid"
-			} else {
-				"valid"
-			}))
 		
-		pw.println
-		pw.println("Evaluation: CRAIndexCalculator.jar")
-		pw.println("===================================")
-		pw.println
-		pw.printf("Model path: %s\n", bestResult.bestModelPath)
-		pw.print(runEvaluationJarAgainstBestModel(bestResult.bestModelPath))
+		if(bestResult.bestModelPath == null){
+		
+			pw.printf("No valid solutions found for this experiment.")
+		
+		} else {
+			
+			pw.printf("Best CRA was %s for model with hash code %08X. This model was %s.\n", bestResult.maxCRA,
+				bestResult.bestModelHashCode, (if (bestResult.hasUnassignedFeatures) {
+					"invalid"
+				} else {
+					"valid"
+				}))	
+
+			pw.println
+			pw.println("Evaluation: CRAIndexCalculator.jar")
+			pw.println("===================================")
+			pw.println
+			pw.printf("Model path: %s\n", bestResult.bestModelPath)
+			pw.print(runEvaluationJarAgainstBestModel(bestResult.bestModelPath))
+
+		}
+		
 		pw.close
 		
 	}
@@ -157,17 +168,21 @@ class RunOptimisation {
 	/**
 	 * Run a single experiment and record its outcomes
 	 */
-	def ResultRecord runOneExperiment(String optSpecName, InputModelDesc inputDesc, String batchId, int runIdx) {
+	def ResultRecord runOneExperiment(String optSpecName, InputModelDesc inputDesc, String batchStartTime, int batchId, int runIdx) {
 		System.out.printf("Starting %01dth experiment run for specification \"%s\" with input model \"%s\".\n", runIdx,
 			optSpecName, inputDesc.modelName)
 
-		val pathPrefix = "gen/models/ttc/" + optSpecName + "/" + batchId + "/" + inputDesc.modelName + "/" + runIdx
+		val pathPrefix = "gen/models/ttc/" + optSpecName + "/" + batchStartTime + "/" + inputDesc.modelName + "-configuration-" + batchId + "/" + runIdx
 			
 
 		val serializedRulesPrefix = pathPrefix + "/rules/"
 
 		val model = modelLoader.loadModel("src/uk/ac/kcl/mdeoptimiser/ecmfa2017/opt_specs/" + optSpecName +
 			".mopt") as Optimisation
+		
+		//Run modify the model to run with the given experiment configuration
+		model.optimisation.algorithmEvolutions = inputDesc.generations * inputDesc.populationSize
+		model.optimisation.algorithmPopulation = inputDesc.populationSize
 
 		val modelProvider = injector.getInstance(CRAModelProvider)
 		modelProvider.setInputModelName(inputDesc.modelName)
@@ -176,7 +191,7 @@ class RunOptimisation {
 		val startTime = System.nanoTime
 
 		val interpreter = new OptimisationInterpreter(model, modelProvider, serializedRulesPrefix)
-		val optimiserOutcome = interpreter.execute().toList
+		val optimiserOutcome = interpreter.execute()
 
 		// End time measurement
 		val endTime = System.nanoTime
@@ -196,7 +211,7 @@ class RunOptimisation {
 		val sortedResults = optimiserOutcome.toList().filter [ m | featureCounter.computeFitness(m) == 0].map [ m |
 			new Pair<EObject, Double>(m, craComputer.computeFitness(m) * -1)].sortBy[-value]
 
-		if (optimiserOutcome.empty) {
+		if (sortedResults.empty) {
 			println("No valid results for this run")
 		} else {
 			results.bestModelHashCode = sortedResults.head.hashCode
@@ -206,7 +221,7 @@ class RunOptimisation {
 			
 			val fResults = new File(pathPrefix + "/final/results.txt")
 			val pw = new PrintWriter(fResults)
-			System.out.printf("Total time taken for this experiment: %02f milliseconds.\n", results.timeTaken)
+			
 			pw.printf(
 				"Experiment using spec \"%s\" and model \"%s\". Running for %01d generations with a population size of %01d.\n\n",
 				optSpecName, inputDesc.modelName, inputDesc.generations, inputDesc.populationSize)
@@ -216,6 +231,7 @@ class RunOptimisation {
 				pw.printf("Result model %08X at CRA %02f.\n", p.key.hashCode, p.value)
 			]
 			pw.close
+			
 		}
 
 		return results
