@@ -191,7 +191,7 @@ class RunOptimisation {
 		val startTime = System.nanoTime
 
 		val interpreter = new OptimisationInterpreter(model, modelProvider, serializedRulesPrefix)
-		val optimiserOutcome = interpreter.execute()
+		val optimiserOutcome = interpreter.execute().toList
 
 		// End time measurement
 		val endTime = System.nanoTime
@@ -227,7 +227,6 @@ class RunOptimisation {
 				optSpecName, inputDesc.modelName, inputDesc.generations, inputDesc.populationSize)
 			pw.printf("Total time taken for this experiment: %02f milliseconds.\n", results.timeTaken)
 			sortedResults.forEach [ p |
-				System.out.printf("Result model %08X at CRA %02f.\n", p.key.hashCode, p.value)
 				pw.printf("Result model %08X at CRA %02f.\n", p.key.hashCode, p.value)
 			]
 			pw.close
