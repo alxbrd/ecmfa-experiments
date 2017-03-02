@@ -62,17 +62,17 @@ class RunOptimisation {
 	 */
 	static val optSpecs = #["cra"]
 	static val inputModels = #[
-		new InputModelDesc("TTC_InputRDG_A", 1000, 50), 
-		new InputModelDesc("TTC_InputRDG_B", 1000, 50),
-		new InputModelDesc("TTC_InputRDG_C", 1000, 50),
-		new InputModelDesc("TTC_InputRDG_D", 1000, 50),
-		new InputModelDesc("TTC_InputRDG_E", 1000, 50),
+		new InputModelDesc("TTC_InputRDG_A", 100, 50), 
+		new InputModelDesc("TTC_InputRDG_B", 100, 50),
+		new InputModelDesc("TTC_InputRDG_C", 100, 50),
+		new InputModelDesc("TTC_InputRDG_D", 100, 50),
+		new InputModelDesc("TTC_InputRDG_E", 100, 50),
 		
-		new InputModelDesc("TTC_InputRDG_A", 1000, 100),
-		new InputModelDesc("TTC_InputRDG_B", 1000, 100),
-		new InputModelDesc("TTC_InputRDG_C", 1000, 100),
-		new InputModelDesc("TTC_InputRDG_D", 1000, 100),
-		new InputModelDesc("TTC_InputRDG_E", 1000, 100),
+		new InputModelDesc("TTC_InputRDG_A", 100, 100),
+		new InputModelDesc("TTC_InputRDG_B", 100, 100),
+		new InputModelDesc("TTC_InputRDG_C", 100, 100),
+		new InputModelDesc("TTC_InputRDG_D", 100, 100),
+		new InputModelDesc("TTC_InputRDG_E", 100, 100),
 			
 		new InputModelDesc("TTC_InputRDG_A", 100, 100),
 		new InputModelDesc("TTC_InputRDG_B", 100, 100),
@@ -104,6 +104,7 @@ class RunOptimisation {
 	 */
 	def runBatchForSpecAndModel(String optSpec, InputModelDesc inputDesc) {
 		val lResults = new LinkedList<ResultRecord>()
+		
 		(0 ..< 10).forEach [ idx |
 			lResults.add(runOneExperiment(optSpec, inputDesc, idx))
 		]
@@ -163,6 +164,8 @@ class RunOptimisation {
 		val pathPrefix = "gen/models/ttc/" + optSpecName + "/" + inputDesc.modelName + "/" + runIdx + "/" +
 			new SimpleDateFormat("yyMMdd-HHmmss").format(new Date())
 
+		val serializedRulesPrefix = pathPrefix + "/rules/"
+
 		val model = modelLoader.loadModel("src/uk/ac/kcl/mdeoptimiser/ecmfa2017/opt_specs/" + optSpecName +
 			".mopt") as Optimisation
 
@@ -172,7 +175,7 @@ class RunOptimisation {
 		// Start measuring time
 		val startTime = System.nanoTime
 
-		val interpreter = new OptimisationInterpreter(model, modelProvider)
+		val interpreter = new OptimisationInterpreter(model, modelProvider, serializedRulesPrefix)
 		val optimiserOutcome = interpreter.execute()
 
 		// End time measurement
@@ -182,8 +185,8 @@ class RunOptimisation {
 		// Store result models
 		modelProvider.storeModels(optimiserOutcome, pathPrefix + "/final")
 
-	    // optimiserOutcome
-		//		.forEach[m | modelProvider.storeModelAndInfo(model, pathPrefix + "/final", modelProvider.modelPaths.head)]
+	     optimiserOutcome
+				.forEach[m | modelProvider.storeModelAndInfo(model, pathPrefix + "/final")]
 
 		// Output results
 		val results = new ResultRecord
@@ -192,26 +195,30 @@ class RunOptimisation {
 
 		results.timeTaken = totalTime / 1000000
 
+
+		val sortedResults = optimiserOutcome.toList().filter [ m | featureCounter.computeFitness(m) == 0].map [ m |
+			new Pair<EObject, Double>(m, craComputer.computeFitness(m))].sortBy[-value]
+
 		if (optimiserOutcome.empty) {
 			println("No valid results for this run")
 		} else {
-//			results.bestModelHashCode = optimiserOutcome.head.hashCode
-//			results.maxCRA = optimiserOutcome.head.value
-//			results.hasUnassignedFeatures = false
-//			results.bestModelPath = sortedResults.head.key.eResource.URI.toString
-//			
-//			val fResults = new File(pathPrefix + "/final/results.txt")
-//			val pw = new PrintWriter(fResults)
-//			System.out.printf("Total time taken for this experiment: %02f milliseconds.\n", results.timeTaken)
-//			pw.printf(
-//				"Experiment using spec \"%s\" and model \"%s\". Running for %01d generations with a population size of %01d.\n\n",
-//				optSpecName, inputDesc.modelName, inputDesc.generations, inputDesc.populationSize)
-//			pw.printf("Total time taken for this experiment: %02f milliseconds.\n", results.timeTaken)
-//			sortedResults.forEach [ p |
-//				System.out.printf("Result model %08X at CRA %02f.\n", p.key.hashCode, p.value)
-//				pw.printf("Result model %08X at CRA %02f.\n", p.key.hashCode, p.value)
-//			]
-//			pw.close
+			results.bestModelHashCode = sortedResults.head.hashCode
+			results.maxCRA = sortedResults.head.value
+			results.hasUnassignedFeatures = false
+			results.bestModelPath = sortedResults.head.key.eResource.URI.toString
+			
+			val fResults = new File(pathPrefix + "/final/results.txt")
+			val pw = new PrintWriter(fResults)
+			System.out.printf("Total time taken for this experiment: %02f milliseconds.\n", results.timeTaken)
+			pw.printf(
+				"Experiment using spec \"%s\" and model \"%s\". Running for %01d generations with a population size of %01d.\n\n",
+				optSpecName, inputDesc.modelName, inputDesc.generations, inputDesc.populationSize)
+			pw.printf("Total time taken for this experiment: %02f milliseconds.\n", results.timeTaken)
+			sortedResults.forEach [ p |
+				System.out.printf("Result model %08X at CRA %02f.\n", p.key.hashCode, p.value)
+				pw.printf("Result model %08X at CRA %02f.\n", p.key.hashCode, p.value)
+			]
+			pw.close
 		}
 
 		return results

@@ -17,11 +17,14 @@ import java.util.function.Consumer;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
+import org.eclipse.xtext.xbase.lib.DoubleExtensions;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -29,6 +32,8 @@ import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.IteratorExtensions;
+import org.eclipse.xtext.xbase.lib.Pair;
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import uk.ac.kcl.MDEOptimiseStandaloneSetup;
 import uk.ac.kcl.interpreter.OptimisationInterpreter;
 import uk.ac.kcl.mdeoptimise.Optimisation;
@@ -91,7 +96,7 @@ public class RunOptimisation {
    */
   private final static List<String> optSpecs = Collections.<String>unmodifiableList(CollectionLiterals.<String>newArrayList("cra"));
   
-  private final static List<RunOptimisation.InputModelDesc> inputModels = Collections.<RunOptimisation.InputModelDesc>unmodifiableList(CollectionLiterals.<RunOptimisation.InputModelDesc>newArrayList(new RunOptimisation.InputModelDesc("TTC_InputRDG_A", 1000, 50), new RunOptimisation.InputModelDesc("TTC_InputRDG_B", 1000, 50), new RunOptimisation.InputModelDesc("TTC_InputRDG_C", 1000, 50), new RunOptimisation.InputModelDesc("TTC_InputRDG_D", 1000, 50), new RunOptimisation.InputModelDesc("TTC_InputRDG_E", 1000, 50), new RunOptimisation.InputModelDesc("TTC_InputRDG_A", 1000, 100), new RunOptimisation.InputModelDesc("TTC_InputRDG_B", 1000, 100), new RunOptimisation.InputModelDesc("TTC_InputRDG_C", 1000, 100), new RunOptimisation.InputModelDesc("TTC_InputRDG_D", 1000, 100), new RunOptimisation.InputModelDesc("TTC_InputRDG_E", 1000, 100), new RunOptimisation.InputModelDesc("TTC_InputRDG_A", 100, 100), new RunOptimisation.InputModelDesc("TTC_InputRDG_B", 100, 100), new RunOptimisation.InputModelDesc("TTC_InputRDG_C", 100, 100), new RunOptimisation.InputModelDesc("TTC_InputRDG_D", 100, 100), new RunOptimisation.InputModelDesc("TTC_InputRDG_E", 100, 100), new RunOptimisation.InputModelDesc("TTC_InputRDG_A", 50, 20), new RunOptimisation.InputModelDesc("TTC_InputRDG_B", 50, 20), new RunOptimisation.InputModelDesc("TTC_InputRDG_C", 50, 20), new RunOptimisation.InputModelDesc("TTC_InputRDG_D", 50, 20), new RunOptimisation.InputModelDesc("TTC_InputRDG_E", 50, 20)));
+  private final static List<RunOptimisation.InputModelDesc> inputModels = Collections.<RunOptimisation.InputModelDesc>unmodifiableList(CollectionLiterals.<RunOptimisation.InputModelDesc>newArrayList(new RunOptimisation.InputModelDesc("TTC_InputRDG_A", 100, 50), new RunOptimisation.InputModelDesc("TTC_InputRDG_B", 100, 50), new RunOptimisation.InputModelDesc("TTC_InputRDG_C", 100, 50), new RunOptimisation.InputModelDesc("TTC_InputRDG_D", 100, 50), new RunOptimisation.InputModelDesc("TTC_InputRDG_E", 100, 50), new RunOptimisation.InputModelDesc("TTC_InputRDG_A", 100, 100), new RunOptimisation.InputModelDesc("TTC_InputRDG_B", 100, 100), new RunOptimisation.InputModelDesc("TTC_InputRDG_C", 100, 100), new RunOptimisation.InputModelDesc("TTC_InputRDG_D", 100, 100), new RunOptimisation.InputModelDesc("TTC_InputRDG_E", 100, 100), new RunOptimisation.InputModelDesc("TTC_InputRDG_A", 100, 100), new RunOptimisation.InputModelDesc("TTC_InputRDG_B", 100, 100), new RunOptimisation.InputModelDesc("TTC_InputRDG_C", 100, 100), new RunOptimisation.InputModelDesc("TTC_InputRDG_D", 100, 100), new RunOptimisation.InputModelDesc("TTC_InputRDG_E", 100, 100), new RunOptimisation.InputModelDesc("TTC_InputRDG_A", 50, 20), new RunOptimisation.InputModelDesc("TTC_InputRDG_B", 50, 20), new RunOptimisation.InputModelDesc("TTC_InputRDG_C", 50, 20), new RunOptimisation.InputModelDesc("TTC_InputRDG_D", 50, 20), new RunOptimisation.InputModelDesc("TTC_InputRDG_E", 50, 20)));
   
   /**
    * Run all experiments
@@ -202,32 +207,88 @@ public class RunOptimisation {
    * Run a single experiment and record its outcomes
    */
   public RunOptimisation.ResultRecord runOneExperiment(final String optSpecName, final RunOptimisation.InputModelDesc inputDesc, final int runIdx) {
-    System.out.printf("Starting %01dth experiment run for specification \"%s\" with input model \"%s\".\n", Integer.valueOf(runIdx), optSpecName, inputDesc.modelName);
-    SimpleDateFormat _simpleDateFormat = new SimpleDateFormat("yyMMdd-HHmmss");
-    Date _date = new Date();
-    String _format = _simpleDateFormat.format(_date);
-    final String pathPrefix = ((((((("gen/models/ttc/" + optSpecName) + "/") + inputDesc.modelName) + "/") + Integer.valueOf(runIdx)) + "/") + _format);
-    EObject _loadModel = this.modelLoader.loadModel((("src/uk/ac/kcl/mdeoptimiser/ecmfa2017/opt_specs/" + optSpecName) + 
-      ".mopt"));
-    final Optimisation model = ((Optimisation) _loadModel);
-    final CRAModelProvider modelProvider = RunOptimisation.injector.<CRAModelProvider>getInstance(CRAModelProvider.class);
-    modelProvider.setInputModelName(inputDesc.modelName);
-    final long startTime = System.nanoTime();
-    final OptimisationInterpreter interpreter = new OptimisationInterpreter(model, modelProvider);
-    final Iterator<EObject> optimiserOutcome = interpreter.execute();
-    final long endTime = System.nanoTime();
-    final long totalTime = (endTime - startTime);
-    modelProvider.storeModels(optimiserOutcome, (pathPrefix + "/final"));
-    final RunOptimisation.ResultRecord results = new RunOptimisation.ResultRecord();
-    final MaximiseCRA craComputer = new MaximiseCRA();
-    final MinimiseClasslessFeatures featureCounter = new MinimiseClasslessFeatures();
-    results.timeTaken = (totalTime / 1000000);
-    boolean _isEmpty = IteratorExtensions.isEmpty(optimiserOutcome);
-    if (_isEmpty) {
-      InputOutput.<String>println("No valid results for this run");
-    } else {
+    try {
+      System.out.printf("Starting %01dth experiment run for specification \"%s\" with input model \"%s\".\n", Integer.valueOf(runIdx), optSpecName, inputDesc.modelName);
+      SimpleDateFormat _simpleDateFormat = new SimpleDateFormat("yyMMdd-HHmmss");
+      Date _date = new Date();
+      String _format = _simpleDateFormat.format(_date);
+      final String pathPrefix = ((((((("gen/models/ttc/" + optSpecName) + "/") + inputDesc.modelName) + "/") + Integer.valueOf(runIdx)) + "/") + _format);
+      final String serializedRulesPrefix = (pathPrefix + "/rules/");
+      EObject _loadModel = this.modelLoader.loadModel((("src/uk/ac/kcl/mdeoptimiser/ecmfa2017/opt_specs/" + optSpecName) + 
+        ".mopt"));
+      final Optimisation model = ((Optimisation) _loadModel);
+      final CRAModelProvider modelProvider = RunOptimisation.injector.<CRAModelProvider>getInstance(CRAModelProvider.class);
+      modelProvider.setInputModelName(inputDesc.modelName);
+      final long startTime = System.nanoTime();
+      final OptimisationInterpreter interpreter = new OptimisationInterpreter(model, modelProvider, serializedRulesPrefix);
+      final Iterator<EObject> optimiserOutcome = interpreter.execute();
+      final long endTime = System.nanoTime();
+      final long totalTime = (endTime - startTime);
+      modelProvider.storeModels(optimiserOutcome, (pathPrefix + "/final"));
+      final Procedure1<EObject> _function = (EObject m) -> {
+        modelProvider.storeModelAndInfo(model, (pathPrefix + "/final"));
+      };
+      IteratorExtensions.<EObject>forEach(optimiserOutcome, _function);
+      final RunOptimisation.ResultRecord results = new RunOptimisation.ResultRecord();
+      final MaximiseCRA craComputer = new MaximiseCRA();
+      final MinimiseClasslessFeatures featureCounter = new MinimiseClasslessFeatures();
+      results.timeTaken = (totalTime / 1000000);
+      List<EObject> _list = IteratorExtensions.<EObject>toList(optimiserOutcome);
+      final Function1<EObject, Boolean> _function_1 = (EObject m) -> {
+        double _computeFitness = featureCounter.computeFitness(m);
+        return Boolean.valueOf((_computeFitness == 0));
+      };
+      Iterable<EObject> _filter = IterableExtensions.<EObject>filter(_list, _function_1);
+      final Function1<EObject, Pair<EObject, Double>> _function_2 = (EObject m) -> {
+        double _computeFitness = craComputer.computeFitness(m);
+        return new Pair<EObject, Double>(m, Double.valueOf(_computeFitness));
+      };
+      Iterable<Pair<EObject, Double>> _map = IterableExtensions.<EObject, Pair<EObject, Double>>map(_filter, _function_2);
+      final Function1<Pair<EObject, Double>, Double> _function_3 = (Pair<EObject, Double> it) -> {
+        Double _value = it.getValue();
+        return Double.valueOf(DoubleExtensions.operator_minus(_value));
+      };
+      final List<Pair<EObject, Double>> sortedResults = IterableExtensions.<Pair<EObject, Double>, Double>sortBy(_map, _function_3);
+      boolean _isEmpty = IteratorExtensions.isEmpty(optimiserOutcome);
+      if (_isEmpty) {
+        InputOutput.<String>println("No valid results for this run");
+      } else {
+        Pair<EObject, Double> _head = IterableExtensions.<Pair<EObject, Double>>head(sortedResults);
+        int _hashCode = _head.hashCode();
+        results.bestModelHashCode = _hashCode;
+        Pair<EObject, Double> _head_1 = IterableExtensions.<Pair<EObject, Double>>head(sortedResults);
+        Double _value = _head_1.getValue();
+        results.maxCRA = (_value).doubleValue();
+        results.hasUnassignedFeatures = false;
+        Pair<EObject, Double> _head_2 = IterableExtensions.<Pair<EObject, Double>>head(sortedResults);
+        EObject _key = _head_2.getKey();
+        Resource _eResource = _key.eResource();
+        URI _uRI = _eResource.getURI();
+        String _string = _uRI.toString();
+        results.bestModelPath = _string;
+        final File fResults = new File((pathPrefix + "/final/results.txt"));
+        final PrintWriter pw = new PrintWriter(fResults);
+        System.out.printf("Total time taken for this experiment: %02f milliseconds.\n", Double.valueOf(results.timeTaken));
+        pw.printf(
+          "Experiment using spec \"%s\" and model \"%s\". Running for %01d generations with a population size of %01d.\n\n", optSpecName, inputDesc.modelName, Integer.valueOf(inputDesc.generations), Integer.valueOf(inputDesc.populationSize));
+        pw.printf("Total time taken for this experiment: %02f milliseconds.\n", Double.valueOf(results.timeTaken));
+        final Consumer<Pair<EObject, Double>> _function_4 = (Pair<EObject, Double> p) -> {
+          EObject _key_1 = p.getKey();
+          int _hashCode_1 = _key_1.hashCode();
+          Double _value_1 = p.getValue();
+          System.out.printf("Result model %08X at CRA %02f.\n", Integer.valueOf(_hashCode_1), _value_1);
+          EObject _key_2 = p.getKey();
+          int _hashCode_2 = _key_2.hashCode();
+          Double _value_2 = p.getValue();
+          pw.printf("Result model %08X at CRA %02f.\n", Integer.valueOf(_hashCode_2), _value_2);
+        };
+        sortedResults.forEach(_function_4);
+        pw.close();
+      }
+      return results;
+    } catch (Throwable _e) {
+      throw Exceptions.sneakyThrow(_e);
     }
-    return results;
   }
   
   public Object getFeature(final EObject o, final String feature) {
