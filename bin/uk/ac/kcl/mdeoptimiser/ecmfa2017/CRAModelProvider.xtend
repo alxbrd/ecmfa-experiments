@@ -16,6 +16,7 @@ import java.io.InputStreamReader
 import java.util.Collection
 import org.eclipse.emf.common.util.URI
 import java.util.stream.Collectors
+import java.util.List
 
 class CRAModelProvider implements IModelProvider {
 
@@ -80,7 +81,7 @@ class CRAModelProvider implements IModelProvider {
 		output
 	}
 
-	def storeModels(Iterator<EObject> models, String pathPrefix) {
+	def storeModels(List<EObject> models, String pathPrefix) {
 		models.forEach[m|m.storeModel(pathPrefix)]
 	}
 	

@@ -3,7 +3,6 @@ package uk.ac.kcl.mdeoptimiser.ecmfa2017;
 import com.google.common.base.Objects;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import uk.ac.kcl.mdeoptimiser.ecmfa2017.AbstractModelQueryFitnessFunction;
 
@@ -13,7 +12,6 @@ public class MaximiseCRA extends AbstractModelQueryFitnessFunction {
   public double computeFitness(final EObject model) {
     final double cohesion = this.calculateCohesionRatio(model);
     final double coupling = this.calculateCouplingRatio(model);
-    InputOutput.<String>println(("Calculated CRA : " + Double.valueOf((cohesion - coupling))));
     return ((cohesion - coupling) * (-1));
   }
   

@@ -62,7 +62,7 @@ class RunOptimisation {
 	 */
 	static val optSpecs = #["cra"]
 	static val inputModels = #[
-		new InputModelDesc("TTC_InputRDG_A", 100, 50), 
+		new InputModelDesc("TTC_InputRDG_A", 100, 10), 
 		new InputModelDesc("TTC_InputRDG_B", 100, 50),
 		new InputModelDesc("TTC_InputRDG_C", 100, 50),
 		new InputModelDesc("TTC_InputRDG_D", 100, 50),
@@ -70,7 +70,7 @@ class RunOptimisation {
 		
 		new InputModelDesc("TTC_InputRDG_A", 100, 100),
 		new InputModelDesc("TTC_InputRDG_B", 100, 100),
-		new InputModelDesc("TTC_InputRDG_C", 100, 100),
+ 		new InputModelDesc("TTC_InputRDG_C", 100, 100),
 		new InputModelDesc("TTC_InputRDG_D", 100, 100),
 		new InputModelDesc("TTC_InputRDG_E", 100, 100),
 			
@@ -104,15 +104,15 @@ class RunOptimisation {
 	 */
 	def runBatchForSpecAndModel(String optSpec, InputModelDesc inputDesc) {
 		val lResults = new LinkedList<ResultRecord>()
+		val batchStartTime = new SimpleDateFormat("yyMMdd-HHmmss").format(new Date())
 		
 		(0 ..< 10).forEach [ idx |
-			lResults.add(runOneExperiment(optSpec, inputDesc, idx))
+			lResults.add(runOneExperiment(optSpec, inputDesc, batchStartTime, idx))
 		]
 
 		// Write averaged results for this specification and model
 		val File f = new File(
-			"gen/models/ttc/" + optSpec + "/" + inputDesc.modelName + "/overall_results" +
-				new SimpleDateFormat("yyMMdd-HHmmss").format(new Date()) + ".txt")
+			"gen/models/ttc/" + optSpec + "/" + batchStartTime + "/" + inputDesc.modelName + "/overall_results.txt")
 		val PrintWriter pw = new PrintWriter(f)
 		pw.println("Overall results for this experiment")
 		pw.println("===================================")
@@ -157,12 +157,12 @@ class RunOptimisation {
 	/**
 	 * Run a single experiment and record its outcomes
 	 */
-	def ResultRecord runOneExperiment(String optSpecName, InputModelDesc inputDesc, int runIdx) {
+	def ResultRecord runOneExperiment(String optSpecName, InputModelDesc inputDesc, String batchId, int runIdx) {
 		System.out.printf("Starting %01dth experiment run for specification \"%s\" with input model \"%s\".\n", runIdx,
 			optSpecName, inputDesc.modelName)
 
-		val pathPrefix = "gen/models/ttc/" + optSpecName + "/" + inputDesc.modelName + "/" + runIdx + "/" +
-			new SimpleDateFormat("yyMMdd-HHmmss").format(new Date())
+		val pathPrefix = "gen/models/ttc/" + optSpecName + "/" + batchId + "/" + inputDesc.modelName + "/" + runIdx
+			
 
 		val serializedRulesPrefix = pathPrefix + "/rules/"
 
@@ -176,17 +176,15 @@ class RunOptimisation {
 		val startTime = System.nanoTime
 
 		val interpreter = new OptimisationInterpreter(model, modelProvider, serializedRulesPrefix)
-		val optimiserOutcome = interpreter.execute()
+		val optimiserOutcome = interpreter.execute().toList
 
 		// End time measurement
 		val endTime = System.nanoTime
 		val totalTime = endTime - startTime
 
 		// Store result models
-		modelProvider.storeModels(optimiserOutcome, pathPrefix + "/final")
-
 	     optimiserOutcome
-				.forEach[m | modelProvider.storeModelAndInfo(model, pathPrefix + "/final")]
+				.forEach[m | modelProvider.storeModelAndInfo(m, pathPrefix + "/final")]
 
 		// Output results
 		val results = new ResultRecord
@@ -195,9 +193,8 @@ class RunOptimisation {
 
 		results.timeTaken = totalTime / 1000000
 
-
 		val sortedResults = optimiserOutcome.toList().filter [ m | featureCounter.computeFitness(m) == 0].map [ m |
-			new Pair<EObject, Double>(m, craComputer.computeFitness(m))].sortBy[-value]
+			new Pair<EObject, Double>(m, craComputer.computeFitness(m) * -1)].sortBy[-value]
 
 		if (optimiserOutcome.empty) {
 			println("No valid results for this run")

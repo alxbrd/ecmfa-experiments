@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -22,7 +24,6 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.IteratorExtensions;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import uk.ac.kcl.interpreter.IModelProvider;
 import uk.ac.kcl.mdeoptimiser.ecmfa2017.ModelLoadHelper;
 
@@ -145,11 +146,11 @@ public class CRAModelProvider implements IModelProvider {
     }
   }
   
-  public void storeModels(final Iterator<EObject> models, final String pathPrefix) {
-    final Procedure1<EObject> _function = (EObject m) -> {
+  public void storeModels(final List<EObject> models, final String pathPrefix) {
+    final Consumer<EObject> _function = (EObject m) -> {
       this.storeModel(m, pathPrefix);
     };
-    IteratorExtensions.<EObject>forEach(models, _function);
+    models.forEach(_function);
   }
   
   public String setInputModelName(final String inputModelName) {
