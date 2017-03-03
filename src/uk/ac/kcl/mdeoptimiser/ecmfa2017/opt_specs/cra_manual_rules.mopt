@@ -1,0 +1,9 @@
+basepath <src/uk/ac/kcl/mdeoptimiser/ecmfa2017/models/> 
+metamodel <architectureCRA.ecore> 			
+objective CRA maximise java { "uk.ac.kcl.mdeoptimiser.ecmfa2017.MaximiseCRA" }
+constraint MinimiseClasslessFeatures java { "uk.ac.kcl.mdeoptimiser.ecmfa2017.MinimiseClasslessFeatures" }
+evolve using <craEvolvers.henshin> unit "createClass"
+evolve using <craEvolvers.henshin> unit "assignFeature"
+evolve using <craEvolvers.henshin> unit "moveFeature"
+evolve using <craEvolvers.henshin> unit "deleteEmptyClass"
+optimisation provider moea algorithm NSGAII evolutions 10000 population 50

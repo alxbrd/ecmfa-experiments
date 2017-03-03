@@ -67,115 +67,32 @@ class RunOptimisation {
 	/*
 	 * Defining the experiments
 	 */
-	static val optSpecs = #["cra"]
+	static val optSpecs = #["cra_manual_rules", "cra_refined_rules", "cra_serge_rules"]
 	static val inputModels = #[
-		new InputModelDesc("TTC_InputRDG_A", 50, 20), 
-		new InputModelDesc("TTC_InputRDG_B", 50, 20),
-		new InputModelDesc("TTC_InputRDG_C", 50, 20),
-		new InputModelDesc("TTC_InputRDG_D", 50, 20),
-		new InputModelDesc("TTC_InputRDG_E", 50, 20),
 
-		new InputModelDesc("TTC_InputRDG_A", 100, 20), 
-		new InputModelDesc("TTC_InputRDG_B", 100, 20),
-		new InputModelDesc("TTC_InputRDG_C", 100, 20),
-		new InputModelDesc("TTC_InputRDG_D", 100, 20),
-		new InputModelDesc("TTC_InputRDG_E", 100, 20),
+		new InputModelDesc("TTC_InputRDG_A", 100, 40), 
+		new InputModelDesc("TTC_InputRDG_B", 100, 40),
+		new InputModelDesc("TTC_InputRDG_C", 100, 40),
+		new InputModelDesc("TTC_InputRDG_D", 100, 40),
+		new InputModelDesc("TTC_InputRDG_E", 100, 40),
 
-		new InputModelDesc("TTC_InputRDG_A", 500, 20), 
-		new InputModelDesc("TTC_InputRDG_B", 500, 20),
-		new InputModelDesc("TTC_InputRDG_C", 500, 20),
-		new InputModelDesc("TTC_InputRDG_D", 500, 20),
-		new InputModelDesc("TTC_InputRDG_E", 500, 20),
+		new InputModelDesc("TTC_InputRDG_A", 500, 40), 
+		new InputModelDesc("TTC_InputRDG_B", 500, 40),
+		new InputModelDesc("TTC_InputRDG_C", 500, 40),
+		new InputModelDesc("TTC_InputRDG_D", 500, 40),
+		new InputModelDesc("TTC_InputRDG_E", 500, 40),
 		
-		new InputModelDesc("TTC_InputRDG_A", 1000, 20), 
-		new InputModelDesc("TTC_InputRDG_B", 1000, 20),
-		new InputModelDesc("TTC_InputRDG_C", 1000, 20),
-		new InputModelDesc("TTC_InputRDG_D", 1000, 20),
-		new InputModelDesc("TTC_InputRDG_E", 1000, 20),
-
-		new InputModelDesc("TTC_InputRDG_A", 2000, 20), 
-		new InputModelDesc("TTC_InputRDG_B", 2000, 20),
-		new InputModelDesc("TTC_InputRDG_C", 2000, 20),
-		new InputModelDesc("TTC_InputRDG_D", 2000, 20),
-		new InputModelDesc("TTC_InputRDG_E", 2000, 20),
+		new InputModelDesc("TTC_InputRDG_A", 1000, 40), 
+		new InputModelDesc("TTC_InputRDG_B", 1000, 40),
+		new InputModelDesc("TTC_InputRDG_C", 1000, 40),
+		new InputModelDesc("TTC_InputRDG_D", 1000, 40),
+		new InputModelDesc("TTC_InputRDG_E", 1000, 40),
 		
-		new InputModelDesc("TTC_InputRDG_A", 3000, 20), 
-		new InputModelDesc("TTC_InputRDG_B", 3000, 20),
-		new InputModelDesc("TTC_InputRDG_C", 3000, 20),
-		new InputModelDesc("TTC_InputRDG_D", 3000, 20),
-		new InputModelDesc("TTC_InputRDG_E", 3000, 20),
-		
-		new InputModelDesc("TTC_InputRDG_A", 50, 30), 
-		new InputModelDesc("TTC_InputRDG_B", 50, 30),
-		new InputModelDesc("TTC_InputRDG_C", 50, 30),
-		new InputModelDesc("TTC_InputRDG_D", 50, 30),
-		new InputModelDesc("TTC_InputRDG_E", 50, 30),
-
-		new InputModelDesc("TTC_InputRDG_A", 100, 30), 
-		new InputModelDesc("TTC_InputRDG_B", 100, 30),
-		new InputModelDesc("TTC_InputRDG_C", 100, 30),
-		new InputModelDesc("TTC_InputRDG_D", 100, 30),
-		new InputModelDesc("TTC_InputRDG_E", 100, 30),
-
-		new InputModelDesc("TTC_InputRDG_A", 500, 30), 
-		new InputModelDesc("TTC_InputRDG_B", 500, 30),
-		new InputModelDesc("TTC_InputRDG_C", 500, 30),
-		new InputModelDesc("TTC_InputRDG_D", 500, 30),
-		new InputModelDesc("TTC_InputRDG_E", 500, 30),
-		
-		new InputModelDesc("TTC_InputRDG_A", 1000, 30), 
-		new InputModelDesc("TTC_InputRDG_B", 1000, 30),
-		new InputModelDesc("TTC_InputRDG_C", 1000, 30),
-		new InputModelDesc("TTC_InputRDG_D", 1000, 30),
-		new InputModelDesc("TTC_InputRDG_E", 1000, 30),
-
-		new InputModelDesc("TTC_InputRDG_A", 2000, 30), 
-		new InputModelDesc("TTC_InputRDG_B", 2000, 30),
-		new InputModelDesc("TTC_InputRDG_C", 2000, 30),
-		new InputModelDesc("TTC_InputRDG_D", 2000, 30),
-		new InputModelDesc("TTC_InputRDG_E", 2000, 30),
-		
-		new InputModelDesc("TTC_InputRDG_A", 3000, 30), 
-		new InputModelDesc("TTC_InputRDG_B", 3000, 30),
-		new InputModelDesc("TTC_InputRDG_C", 3000, 30),
-		new InputModelDesc("TTC_InputRDG_D", 3000, 30),
-		new InputModelDesc("TTC_InputRDG_E", 3000, 30),
-		
-		new InputModelDesc("TTC_InputRDG_A", 50, 50), 
-		new InputModelDesc("TTC_InputRDG_B", 50, 50),
-		new InputModelDesc("TTC_InputRDG_C", 50, 50),
-		new InputModelDesc("TTC_InputRDG_D", 50, 50),
-		new InputModelDesc("TTC_InputRDG_E", 50, 50),
-
-		new InputModelDesc("TTC_InputRDG_A", 100, 50), 
-		new InputModelDesc("TTC_InputRDG_B", 100, 50),
-		new InputModelDesc("TTC_InputRDG_C", 100, 50),
-		new InputModelDesc("TTC_InputRDG_D", 100, 50),
-		new InputModelDesc("TTC_InputRDG_E", 100, 50),
-
-		new InputModelDesc("TTC_InputRDG_A", 500, 50), 
-		new InputModelDesc("TTC_InputRDG_B", 500, 50),
-		new InputModelDesc("TTC_InputRDG_C", 500, 50),
-		new InputModelDesc("TTC_InputRDG_D", 500, 50),
-		new InputModelDesc("TTC_InputRDG_E", 500, 50),
-		
-		new InputModelDesc("TTC_InputRDG_A", 1000, 50), 
-		new InputModelDesc("TTC_InputRDG_B", 1000, 50),
-		new InputModelDesc("TTC_InputRDG_C", 1000, 50),
-		new InputModelDesc("TTC_InputRDG_D", 1000, 50),
-		new InputModelDesc("TTC_InputRDG_E", 1000, 50),
-
-		new InputModelDesc("TTC_InputRDG_A", 2000, 50), 
-		new InputModelDesc("TTC_InputRDG_B", 2000, 50),
-		new InputModelDesc("TTC_InputRDG_C", 2000, 50),
-		new InputModelDesc("TTC_InputRDG_D", 2000, 50),
-		new InputModelDesc("TTC_InputRDG_E", 2000, 50),
-		
-		new InputModelDesc("TTC_InputRDG_A", 3000, 50), 
-		new InputModelDesc("TTC_InputRDG_B", 3000, 50),
-		new InputModelDesc("TTC_InputRDG_C", 3000, 50),
-		new InputModelDesc("TTC_InputRDG_D", 3000, 50),
-		new InputModelDesc("TTC_InputRDG_E", 3000, 50)
+		new InputModelDesc("TTC_InputRDG_A", 2000, 40), 
+		new InputModelDesc("TTC_InputRDG_B", 2000, 40),
+		new InputModelDesc("TTC_InputRDG_C", 2000, 40),
+		new InputModelDesc("TTC_InputRDG_D", 2000, 40),
+		new InputModelDesc("TTC_InputRDG_E", 2000, 40)
 		]
 
 	/**
