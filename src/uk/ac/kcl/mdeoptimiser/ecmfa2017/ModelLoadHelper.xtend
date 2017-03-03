@@ -9,7 +9,6 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EPackage
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.emf.ecore.resource.ResourceSet
-import java.util.Iterator
 
 class ModelLoadHelper {
 	@Inject
@@ -26,6 +25,7 @@ class ModelLoadHelper {
 
 	def loadModel(String path) {
 		val Resource resource = resourceSet.getResource(URI.createURI(path), true)
+
 		resource.contents.head
 	}
 
@@ -48,7 +48,7 @@ class ModelLoadHelper {
 		)
 	}
 
-	def storeModels(Iterator<EObject> models, String pathPrefix) {
+	def storeModels(Collection<EObject> models, String pathPrefix) {
 		models.forEach[m|m.storeModel(pathPrefix)]
 	}
 }

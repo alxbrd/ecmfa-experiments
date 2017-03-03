@@ -80,19 +80,7 @@ class RunOptimisation {
 		new InputModelDesc("TTC_InputRDG_B", 500, 40),
 		new InputModelDesc("TTC_InputRDG_C", 500, 40),
 		new InputModelDesc("TTC_InputRDG_D", 500, 40),
-		new InputModelDesc("TTC_InputRDG_E", 500, 40),
-		
-		new InputModelDesc("TTC_InputRDG_A", 1000, 40), 
-		new InputModelDesc("TTC_InputRDG_B", 1000, 40),
-		new InputModelDesc("TTC_InputRDG_C", 1000, 40),
-		new InputModelDesc("TTC_InputRDG_D", 1000, 40),
-		new InputModelDesc("TTC_InputRDG_E", 1000, 40),
-		
-		new InputModelDesc("TTC_InputRDG_A", 2000, 40), 
-		new InputModelDesc("TTC_InputRDG_B", 2000, 40),
-		new InputModelDesc("TTC_InputRDG_C", 2000, 40),
-		new InputModelDesc("TTC_InputRDG_D", 2000, 40),
-		new InputModelDesc("TTC_InputRDG_E", 2000, 40)
+		new InputModelDesc("TTC_InputRDG_E", 500, 40)
 		]
 
 	/**
