@@ -70,6 +70,24 @@ class RunOptimisation {
 	static val optSpecs = #["cra_manual_rules", "cra_refined_rules", "cra_serge_rules"]
 	static val inputModels = #[
 
+		new InputModelDesc("TTC_InputRDG_A", 100, 30), 
+		new InputModelDesc("TTC_InputRDG_B", 100, 30),
+		new InputModelDesc("TTC_InputRDG_C", 100, 30),
+		new InputModelDesc("TTC_InputRDG_D", 100, 30),
+		new InputModelDesc("TTC_InputRDG_E", 100, 30),
+
+		new InputModelDesc("TTC_InputRDG_A", 500, 30), 
+		new InputModelDesc("TTC_InputRDG_B", 500, 30),
+		new InputModelDesc("TTC_InputRDG_C", 500, 30),
+		new InputModelDesc("TTC_InputRDG_D", 500, 30),
+		new InputModelDesc("TTC_InputRDG_E", 500, 30),
+		
+		new InputModelDesc("TTC_InputRDG_A", 1000, 30), 
+		new InputModelDesc("TTC_InputRDG_B", 1000, 30),
+		new InputModelDesc("TTC_InputRDG_C", 1000, 30),
+		new InputModelDesc("TTC_InputRDG_D", 1000, 30),
+		new InputModelDesc("TTC_InputRDG_E", 1000, 30),
+
 		new InputModelDesc("TTC_InputRDG_A", 100, 40), 
 		new InputModelDesc("TTC_InputRDG_B", 100, 40),
 		new InputModelDesc("TTC_InputRDG_C", 100, 40),
@@ -80,7 +98,32 @@ class RunOptimisation {
 		new InputModelDesc("TTC_InputRDG_B", 500, 40),
 		new InputModelDesc("TTC_InputRDG_C", 500, 40),
 		new InputModelDesc("TTC_InputRDG_D", 500, 40),
-		new InputModelDesc("TTC_InputRDG_E", 500, 40)
+		new InputModelDesc("TTC_InputRDG_E", 500, 40),
+		
+		new InputModelDesc("TTC_InputRDG_A", 1000, 40), 
+		new InputModelDesc("TTC_InputRDG_B", 1000, 40),
+		new InputModelDesc("TTC_InputRDG_C", 1000, 40),
+		new InputModelDesc("TTC_InputRDG_D", 1000, 40),
+		new InputModelDesc("TTC_InputRDG_E", 1000, 40),
+		
+		new InputModelDesc("TTC_InputRDG_A", 100, 50), 
+		new InputModelDesc("TTC_InputRDG_B", 100, 50),
+		new InputModelDesc("TTC_InputRDG_C", 100, 50),
+		new InputModelDesc("TTC_InputRDG_D", 100, 50),
+		new InputModelDesc("TTC_InputRDG_E", 100, 50),
+
+		new InputModelDesc("TTC_InputRDG_A", 500, 50), 
+		new InputModelDesc("TTC_InputRDG_B", 500, 50),
+		new InputModelDesc("TTC_InputRDG_C", 500, 50),
+		new InputModelDesc("TTC_InputRDG_D", 500, 50),
+		new InputModelDesc("TTC_InputRDG_E", 500, 50),
+		
+		new InputModelDesc("TTC_InputRDG_A", 1000, 50), 
+		new InputModelDesc("TTC_InputRDG_B", 1000, 50),
+		new InputModelDesc("TTC_InputRDG_C", 1000, 50),
+		new InputModelDesc("TTC_InputRDG_D", 1000, 50),
+		new InputModelDesc("TTC_InputRDG_E", 1000, 50)
+		
 		]
 
 	/**
