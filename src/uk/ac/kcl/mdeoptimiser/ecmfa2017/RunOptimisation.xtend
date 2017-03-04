@@ -13,9 +13,12 @@ import java.io.InputStreamReader
 import java.util.stream.Collectors
 import uk.ac.kcl.MDEOptimiseStandaloneSetup
 import uk.ac.kcl.mdeoptimise.Optimisation
-import uk.ac.kcl.interpreter.OptimisationInterpreter
 import org.sidiff.common.logging.LogUtil
 import java.util.TimeZone
+import java.util.ArrayList
+import org.eclipse.emf.ecore.util.EcoreUtil
+import uk.ac.kcl.interpreter.OptimisationInterpreter
+import java.util.concurrent.Executors
 
 class RunOptimisation {
 
@@ -36,8 +39,11 @@ class RunOptimisation {
 			val modelIdx = Integer.parseInt(args.get(1))
 			
 			val batchStartTime = new SimpleDateFormat("yyMMdd-HHmmss").format(new Date())
-		
-			app.runBatchForSpecAndModel(optSpecs.get(specIdx), inputModels.get(modelIdx), batchStartTime, 0)
+
+			val executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() - 1);
+	
+			var worker = new ExperimentWorker(optSpecs.get(specIdx), inputModels.get(modelIdx), batchStartTime, 0, app.modelLoader)
+			executor.execute(worker)
 		}
 	}
 
@@ -70,12 +76,48 @@ class RunOptimisation {
 	static val optSpecs = #["cra_manual_rules", "cra_refined_rules", "cra_serge_rules"]
 	static val inputModels = #[
 
+		new InputModelDesc("TTC_InputRDG_A", 100, 10), 
+		new InputModelDesc("TTC_InputRDG_B", 100, 10),
+		new InputModelDesc("TTC_InputRDG_C", 100, 10),
+		new InputModelDesc("TTC_InputRDG_D", 100, 10),
+		new InputModelDesc("TTC_InputRDG_E", 100, 10),
+		
+		new InputModelDesc("TTC_InputRDG_A", 500, 10), 
+		new InputModelDesc("TTC_InputRDG_B", 500, 10),
+		new InputModelDesc("TTC_InputRDG_C", 500, 10),
+		new InputModelDesc("TTC_InputRDG_D", 500, 10),
+		new InputModelDesc("TTC_InputRDG_E", 500, 10),
+		
+		new InputModelDesc("TTC_InputRDG_A", 1000, 10), 
+		new InputModelDesc("TTC_InputRDG_B", 1000, 10),
+		new InputModelDesc("TTC_InputRDG_C", 1000, 10),
+		new InputModelDesc("TTC_InputRDG_D", 1000, 10),
+		new InputModelDesc("TTC_InputRDG_E", 1000, 10),
+
+		new InputModelDesc("TTC_InputRDG_A", 100, 20), 
+		new InputModelDesc("TTC_InputRDG_B", 100, 20),
+		new InputModelDesc("TTC_InputRDG_C", 100, 20),
+		new InputModelDesc("TTC_InputRDG_D", 100, 20),
+		new InputModelDesc("TTC_InputRDG_E", 100, 20),
+		
+		new InputModelDesc("TTC_InputRDG_A", 500, 20), 
+		new InputModelDesc("TTC_InputRDG_B", 500, 20),
+		new InputModelDesc("TTC_InputRDG_C", 500, 20),
+		new InputModelDesc("TTC_InputRDG_D", 500, 20),
+		new InputModelDesc("TTC_InputRDG_E", 500, 20),
+		
+		new InputModelDesc("TTC_InputRDG_A", 1000, 20), 
+		new InputModelDesc("TTC_InputRDG_B", 1000, 20),
+		new InputModelDesc("TTC_InputRDG_C", 1000, 20),
+		new InputModelDesc("TTC_InputRDG_D", 1000, 20),
+		new InputModelDesc("TTC_InputRDG_E", 1000, 20),
+		
 		new InputModelDesc("TTC_InputRDG_A", 100, 30), 
 		new InputModelDesc("TTC_InputRDG_B", 100, 30),
 		new InputModelDesc("TTC_InputRDG_C", 100, 30),
 		new InputModelDesc("TTC_InputRDG_D", 100, 30),
 		new InputModelDesc("TTC_InputRDG_E", 100, 30),
-
+		
 		new InputModelDesc("TTC_InputRDG_A", 500, 30), 
 		new InputModelDesc("TTC_InputRDG_B", 500, 30),
 		new InputModelDesc("TTC_InputRDG_C", 500, 30),
@@ -87,13 +129,13 @@ class RunOptimisation {
 		new InputModelDesc("TTC_InputRDG_C", 1000, 30),
 		new InputModelDesc("TTC_InputRDG_D", 1000, 30),
 		new InputModelDesc("TTC_InputRDG_E", 1000, 30),
-
+		
 		new InputModelDesc("TTC_InputRDG_A", 100, 40), 
 		new InputModelDesc("TTC_InputRDG_B", 100, 40),
 		new InputModelDesc("TTC_InputRDG_C", 100, 40),
 		new InputModelDesc("TTC_InputRDG_D", 100, 40),
 		new InputModelDesc("TTC_InputRDG_E", 100, 40),
-
+		
 		new InputModelDesc("TTC_InputRDG_A", 500, 40), 
 		new InputModelDesc("TTC_InputRDG_B", 500, 40),
 		new InputModelDesc("TTC_InputRDG_C", 500, 40),
@@ -111,7 +153,7 @@ class RunOptimisation {
 		new InputModelDesc("TTC_InputRDG_C", 100, 50),
 		new InputModelDesc("TTC_InputRDG_D", 100, 50),
 		new InputModelDesc("TTC_InputRDG_E", 100, 50),
-
+		
 		new InputModelDesc("TTC_InputRDG_A", 500, 50), 
 		new InputModelDesc("TTC_InputRDG_B", 500, 50),
 		new InputModelDesc("TTC_InputRDG_C", 500, 50),
@@ -132,18 +174,41 @@ class RunOptimisation {
 	def run() {
 
 		val batchStartTime = new SimpleDateFormat("yyMMdd-HHmmss").format(new Date())
+				
+		val executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() - 1);
 		
 		optSpecs.forEach [ optSpec |
 			inputModels.forEach [ inputDesc, index |
-				runBatchForSpecAndModel(optSpec, inputDesc, batchStartTime, index)
+				var worker = new ExperimentWorker(optSpec, inputDesc, batchStartTime, index, modelLoader)
+				executor.execute(worker)
 			]
 		]
 	}
+	
+	public static class ExperimentWorker implements Runnable {
+		
+		String optSpec;
+		InputModelDesc inputDesc;
+		String batchStartTime;
+		int batchId;
+		ModelLoadHelper modelLoader;
+		
+		new(String optSpec, InputModelDesc inputDesc, String batchStartTime, int batchId, ModelLoadHelper modelLoader){
+			this.optSpec = optSpec;
+			this.inputDesc = inputDesc;
+			this.batchStartTime = batchStartTime;
+			this.batchId = batchId;
+			this.modelLoader = modelLoader;
+		}
+		
+		override run() {
+			runBatchForSpecAndModel(optSpec, inputDesc, batchStartTime, batchId, modelLoader)
+		}
 
 	/**
 	 * Run a batch of experiments for the given spec and model, recording overall outcomes in a separate file.
 	 */
-	def runBatchForSpecAndModel(String optSpec, InputModelDesc inputDesc, String batchStartTime, int batchId) {
+	def runBatchForSpecAndModel(String optSpec, InputModelDesc inputDesc, String batchStartTime, int batchId, ModelLoadHelper modelLoader) {
 		val lResults = new LinkedList<ResultRecord>()
 
 		(0 ..< 10).forEach [ idx |
@@ -243,15 +308,17 @@ class RunOptimisation {
 		// End time measurement
 		val endTime = System.nanoTime
 		val totalTime = endTime - startTime
-
+		
+		val optimiserOutcomeCopy = new ArrayList<EObject>();
+		optimiserOutcome.forEach[ EObject object | optimiserOutcomeCopy.add(EcoreUtil.copy(object)) ];
+		
 		// Store result models
-	     optimiserOutcome
-				.forEach[m | modelProvider.storeModelAndInfo(m, pathPrefix + "/final")]
+	     optimiserOutcomeCopy
+		 		.forEach[m | modelProvider.storeModelAndInfo(m, pathPrefix + "/final")]
 
 		// Output results
 		val results = new ResultRecord
 		val craComputer = new MaximiseCRA
-		val featureCounter = new MinimiseClasslessFeatures
 
 		results.timeTaken = totalTime / 1000000
 		var date = new Date(results.timeTaken.longValue); // if you really have long
@@ -260,7 +327,8 @@ class RunOptimisation {
 		var result = formatter.format(date.getTime()) ;
 		
 		
-		val sortedResults = optimiserOutcome.toList().filter [ m | featureCounter.computeFitness(m) == 0].map [ m |
+		
+		val sortedResults = optimiserOutcomeCopy.map [ m |
 			new Pair<EObject, Double>(m, craComputer.computeFitness(m) * -1)].sortBy[-value]
 
 		if (sortedResults.empty) {
@@ -282,17 +350,10 @@ class RunOptimisation {
 				pw.printf("Result model %08X at CRA %02f.\n", p.key.hashCode, p.value)
 			]
 			pw.close
-			
 		}
 
 		return results
 	}
 
-	def getFeature(EObject o, String feature) {
-		o.eGet(o.eClass.getEStructuralFeature(feature))
-	}
-
-	def setFeature(EObject o, String feature, Object value) {
-		o.eSet(o.eClass.getEStructuralFeature(feature), value)
 	}
 }

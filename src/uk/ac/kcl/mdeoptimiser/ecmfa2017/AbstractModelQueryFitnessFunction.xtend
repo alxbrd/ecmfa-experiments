@@ -9,7 +9,13 @@ abstract class AbstractModelQueryFitnessFunction implements IGuidanceFunction {
 	 * Helper function getting the value of the named feature (if it exists) for the given EObject.
 	 */
 	def Object getFeature (EObject o, String feature) {
+		
+		if(o == null){
+			println("Null object given")
+		}
+		
 		o.eGet (o.eClass.getEStructuralFeature(feature))
+		
 	}
 	
 	/**
