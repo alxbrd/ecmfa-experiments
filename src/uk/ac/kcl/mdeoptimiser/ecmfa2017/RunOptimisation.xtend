@@ -68,14 +68,21 @@ class RunOptimisation {
 	/*
 	 * Defining the experiments
 	 */
-	static val optSpecs = #["cra_serge_change_rules","cra_refined_rules", "cra_manual_rules"]
+	static val optSpecs = #["cra_serge_change_rules", "cra_refined_rules", "cra_serge_rules", "cra_manual_rules"]
 	static val inputModels = #[
 
+		new InputModelDesc("TTC_InputRDG_A", 100, 40),
+		new InputModelDesc("TTC_InputRDG_B", 100, 40),
+		new InputModelDesc("TTC_InputRDG_C", 100, 40),
+		new InputModelDesc("TTC_InputRDG_D", 100, 40),
+		new InputModelDesc("TTC_InputRDG_E", 100, 40),
 
 		new InputModelDesc("TTC_InputRDG_A", 500, 40),
 		new InputModelDesc("TTC_InputRDG_B", 500, 40),
-		new InputModelDesc("TTC_InputRDG_C", 500, 40)
-
+		new InputModelDesc("TTC_InputRDG_C", 500, 40),
+		new InputModelDesc("TTC_InputRDG_D", 500, 40),
+		new InputModelDesc("TTC_InputRDG_E", 500, 40)
+		
 		]
 
 	/**
@@ -98,7 +105,7 @@ class RunOptimisation {
 	def runBatchForSpecAndModel(String optSpec, InputModelDesc inputDesc, String batchStartTime, int batchId) {
 		val lResults = new LinkedList<ResultRecord>()
 
-		(0 ..< 5).forEach [ idx |
+		(0 ..< 30).forEach [ idx |
 			lResults.add(runOneExperiment(optSpec, inputDesc, batchStartTime, batchId, idx))
 		]
 
