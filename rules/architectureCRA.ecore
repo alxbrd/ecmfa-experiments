@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="architectureCRA" nsURI="http://momot.big.tuwien.ac.at/architectureCRA/1.0"
+    nsPrefix="architectureCRA">
+  <eClassifiers xsi:type="ecore:EClass" name="C" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="c" ordered="false" upperBound="-1"
+        eType="#//A" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="features" ordered="false"
+        upperBound="-1" eType="#//B" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="A" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="a" lowerBound="1" upperBound="-1"
+        eType="#//B" eOpposite="#//B/b"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Attribute" eSuperTypes="#//B"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Method" eSuperTypes="#//B">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataDependency" upperBound="-1"
+        eType="#//Attribute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="functionalDependency" upperBound="-1"
+        eType="#//Method"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="B" abstract="true" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="b" eType="#//A" eOpposite="#//A/a"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>
