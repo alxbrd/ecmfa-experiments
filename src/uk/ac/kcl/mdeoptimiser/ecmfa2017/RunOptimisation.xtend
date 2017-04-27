@@ -68,7 +68,7 @@ class RunOptimisation {
 	/*
 	 * Defining the experiments
 	 */
-	static val optSpecs = #["cra_serge_change_rules", "cra_refined_rules", "cra_serge_rules", "cra_manual_rules"]
+	static val optSpecs = #["cra_serge_change_rules", "cra_refined_rules", "cra_manual_rules", "cra_serge_rules"]
 	static val inputModels = #[
 
 		new InputModelDesc("TTC_InputRDG_A", 100, 40),
