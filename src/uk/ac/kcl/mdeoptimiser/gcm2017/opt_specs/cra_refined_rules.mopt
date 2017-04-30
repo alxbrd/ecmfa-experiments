@@ -1,0 +1,7 @@
+basepath <src/uk/ac/kcl/mdeoptimiser/gcm2017/models/> 
+metamodel <architectureCRA.ecore> 
+objective CRA maximise java { "uk.ac.kcl.mdeoptimiser.gcm2017.MaximiseCRA" }
+constraint MinimiseClasslessFeatures java { "uk.ac.kcl.mdeoptimiser.gcm2017.MinimiseClasslessFeatures" }
+rule generation nodes { "Class" }
+refined multiplicity node "Feature" edge "isEncapsulatedBy" lower "1" upper "1"
+optimisation provider moea algorithm NSGAII evolutions 10000 population 50 

@@ -1,4 +1,4 @@
-package uk.ac.kcl.mdeoptimiser.ecmfa2017
+package uk.ac.kcl.mdeoptimiser.gcm2017
 
 import com.google.inject.Inject
 import com.google.inject.Injector
@@ -43,7 +43,7 @@ class RunOptimisation {
 	}
 
 	@Inject
-	private ModelLoadHelper modelLoader
+	private uk.ac.kcl.mdeoptimiser.gcm2017.ModelLoadHelper modelLoader
 
 	private static class ResultRecord {
 		public double timeTaken
@@ -68,15 +68,27 @@ class RunOptimisation {
 	/*
 	 * Defining the experiments
 	 */
-	static val optSpecs = #["cra_serge_change_rules", "cra_refined_rules", "cra_manual_rules", "cra_serge_rules"]
+	static val optSpecs = #[ "cra_refined_rules", "cra_manual_rules", "cra_serge_change_rules", "cra_serge_rules"]
 	static val inputModels = #[
 
+		new InputModelDesc("Random_TTC_InputRDG_A", 100, 40),
+		new InputModelDesc("Random_TTC_InputRDG_B", 100, 40),
+		new InputModelDesc("Random_TTC_InputRDG_C", 100, 40),
+		new InputModelDesc("Random_TTC_InputRDG_D", 100, 40),
+		new InputModelDesc("Random_TTC_InputRDG_E", 100, 40),
+		
+		new InputModelDesc("Random_TTC_InputRDG_A", 500, 40),
+		new InputModelDesc("Random_TTC_InputRDG_B", 500, 40),
+		new InputModelDesc("Random_TTC_InputRDG_C", 500, 40),
+		new InputModelDesc("Random_TTC_InputRDG_D", 500, 40),
+		new InputModelDesc("Random_TTC_InputRDG_E", 500, 40),
+		
 		new InputModelDesc("TTC_InputRDG_A", 100, 40),
 		new InputModelDesc("TTC_InputRDG_B", 100, 40),
 		new InputModelDesc("TTC_InputRDG_C", 100, 40),
 		new InputModelDesc("TTC_InputRDG_D", 100, 40),
 		new InputModelDesc("TTC_InputRDG_E", 100, 40),
-
+		
 		new InputModelDesc("TTC_InputRDG_A", 500, 40),
 		new InputModelDesc("TTC_InputRDG_B", 500, 40),
 		new InputModelDesc("TTC_InputRDG_C", 500, 40),
@@ -105,7 +117,7 @@ class RunOptimisation {
 	def runBatchForSpecAndModel(String optSpec, InputModelDesc inputDesc, String batchStartTime, int batchId) {
 		val lResults = new LinkedList<ResultRecord>()
 
-		(0 ..< 30).forEach [ idx |
+		(0 ..< 1).forEach [ idx |
 			lResults.add(runOneExperiment(optSpec, inputDesc, batchStartTime, batchId, idx))
 		]
 
@@ -186,7 +198,7 @@ class RunOptimisation {
 
 		val serializedRulesPrefix = pathPrefix + "/rules/"
 
-		val model = modelLoader.loadModel("src/uk/ac/kcl/mdeoptimiser/ecmfa2017/opt_specs/" + optSpecName +
+		val model = modelLoader.loadModel("src/uk/ac/kcl/mdeoptimiser/gcm2017/opt_specs/" + optSpecName +
 			".mopt") as Optimisation
 		
 		//Run modify the model to run with the given experiment configuration
@@ -217,8 +229,8 @@ class RunOptimisation {
 
 		// Output results
 		val results = new ResultRecord
-		val craComputer = new MaximiseCRA
-		val featureCounter = new MinimiseClasslessFeatures
+		val craComputer = new uk.ac.kcl.mdeoptimiser.gcm2017.MaximiseCRA
+		val featureCounter = new uk.ac.kcl.mdeoptimiser.gcm2017.MinimiseClasslessFeatures
 
 		results.timeTaken = totalTime / 1000000
 		var date = new Date(results.timeTaken.longValue); // if you really have long
@@ -236,7 +248,7 @@ class RunOptimisation {
 			results.bestModelHashCode = sortedResults.head.hashCode
 			results.maxCRA = sortedResults.head.value
 			results.hasUnassignedFeatures = false
-			results.bestModelPath = sortedResults.head.key.eResource.URI.toString
+			results.bestModelPath = sortedResults.head.key.eResource.getURI.toString
 			
 			val fResults = new File(pathPrefix + "/final/results.txt")
 			val pw = new PrintWriter(fResults)
@@ -263,3 +275,4 @@ class RunOptimisation {
 		o.eSet(o.eClass.getEStructuralFeature(feature), value)
 	}
 }
+			

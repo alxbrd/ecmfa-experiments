@@ -1,9 +1,9 @@
-package uk.ac.kcl.mdeoptimiser.ecmfa2017
+package uk.ac.kcl.mdeoptimiser.gcm2017
 
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.common.util.EList
 
-class MaximiseCRA extends AbstractModelQueryFitnessFunction {
+class MaximiseCRA extends uk.ac.kcl.mdeoptimiser.gcm2017.AbstractModelQueryFitnessFunction {
 
 	override double computeFitness(EObject model) {
 		val cohesion = calculateCohesionRatio(model);

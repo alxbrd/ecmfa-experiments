@@ -1,11 +1,9 @@
-package uk.ac.kcl.mdeoptimiser.ecmfa2017
+package uk.ac.kcl.mdeoptimiser.gcm2017
 
 import uk.ac.kcl.interpreter.IModelProvider
 import org.eclipse.emf.ecore.EPackage
 import org.eclipse.emf.ecore.EObject
-import java.util.Set
 import com.google.inject.Inject
-import java.util.Iterator
 import org.eclipse.emf.ecore.resource.ResourceSet
 import java.util.Collections
 import java.io.File
@@ -13,7 +11,6 @@ import java.io.PrintWriter
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.util.Collection
 import org.eclipse.emf.common.util.URI
 import java.util.stream.Collectors
 import java.util.List
@@ -21,7 +18,7 @@ import java.util.List
 class CRAModelProvider implements IModelProvider {
 
 	@Inject
-	private ModelLoadHelper modelLoader
+	private uk.ac.kcl.mdeoptimiser.gcm2017.ModelLoadHelper modelLoader
 
 	private String inputModelName
 	
@@ -29,14 +26,19 @@ class CRAModelProvider implements IModelProvider {
 		
 	override initialModels(EPackage metamodel) {
 		modelLoader.registerPackage(metamodel)
-
-		#[modelLoader.loadModel("src/uk/ac/kcl/mdeoptimiser/ecmfa2017/models/" + inputModelName + ".xmi")].iterator
-	}
+		
+		if(inputModelName.startsWith("Random")){
+					
+			var model = modelLoader.loadModelAndRandomAssign("src/uk/ac/kcl/mdeoptimiser/gcm2017/models/" 
+				+ inputModelName.subSequence(7, inputModelName.length) + ".xmi"
+			)
 	
-	def loadModel(String path) {
-		val resource = resourceSet.createResource(URI.createURI(path))
-		resource.load(Collections.EMPTY_MAP)
-		resource.allContents.head
+			return #[model].iterator
+		} 
+		
+		var model = modelLoader.loadModel("src/uk/ac/kcl/mdeoptimiser/gcm2017/models/" + inputModelName + ".xmi")
+		#[model].iterator
+
 	}
 
 	def writeModel(EObject model, String path) {
