@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="ASCII"?>
+<henshin:Module xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:henshin="http://www.eclipse.org/emf/2011/Henshin" xmi:id="_rd07Ait-EeejvM4ms8yGow" name="DELETE_Class_IN_ClassModel_(classes)_Refined" description="Deletes one Class in ClassModel">
+  <imports href="architectureCRA.ecore#/"/>
+  <units xsi:type="henshin:Rule" xmi:id="_rd07Ayt-EeejvM4ms8yGow" name="deleteClass_IN_ClassModel_refined" description="deletes one Class in the context: ClassModel">
+    <parameters xmi:id="_rd07BCt-EeejvM4ms8yGow" name="Selected">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//ClassModel"/>
+    </parameters>
+    <parameters xmi:id="_rd07BSt-EeejvM4ms8yGow" name="ToBeDeleted">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//Class"/>
+    </parameters>
+    <parameters xmi:id="_rd07Bit-EeejvM4ms8yGow" name="Existing">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//Feature"/>
+    </parameters>
+    <parameters xmi:id="_rd07Byt-EeejvM4ms8yGow" name="NewTarget">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//Class"/>
+    </parameters>
+    <lhs xmi:id="_rd07CCt-EeejvM4ms8yGow" name="LHS">
+      <nodes xmi:id="_rd07CSt-EeejvM4ms8yGow" name="Selected" outgoing="_rd07DSt-EeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//ClassModel"/>
+      </nodes>
+      <nodes xmi:id="_rd07Cit-EeejvM4ms8yGow" name="ToBeDeleted" incoming="_rd07DSt-EeejvM4ms8yGow _rd07Dyt-EeejvM4ms8yGow" outgoing="_rd07Dit-EeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Class"/>
+      </nodes>
+      <nodes xmi:id="_rd07Cyt-EeejvM4ms8yGow" name="Existing" incoming="_rd07Dit-EeejvM4ms8yGow" outgoing="_rd07Dyt-EeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Feature"/>
+      </nodes>
+      <nodes xmi:id="_rd07DCt-EeejvM4ms8yGow" name="NewTarget">
+        <type href="architectureCRA.ecore#//Class"/>
+      </nodes>
+      <edges xmi:id="_rd07DSt-EeejvM4ms8yGow" source="_rd07CSt-EeejvM4ms8yGow" target="_rd07Cit-EeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//ClassModel/classes"/>
+      </edges>
+      <edges xmi:id="_rd07Dit-EeejvM4ms8yGow" source="_rd07Cit-EeejvM4ms8yGow" target="_rd07Cyt-EeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Class/encapsulates"/>
+      </edges>
+      <edges xmi:id="_rd07Dyt-EeejvM4ms8yGow" source="_rd07Cyt-EeejvM4ms8yGow" target="_rd07Cit-EeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Feature/isEncapsulatedBy"/>
+      </edges>
+    </lhs>
+    <rhs xmi:id="_rd07ECt-EeejvM4ms8yGow" name="RHS">
+      <nodes xmi:id="_rd07ESt-EeejvM4ms8yGow" name="Selected">
+        <type href="architectureCRA.ecore#//ClassModel"/>
+      </nodes>
+      <nodes xmi:id="_rd07Eit-EeejvM4ms8yGow" name="Existing" incoming="_rd07FCt-EeejvM4ms8yGow" outgoing="_rd07FSt-EeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Feature"/>
+      </nodes>
+      <nodes xmi:id="_rd07Eyt-EeejvM4ms8yGow" name="NewTarget" incoming="_rd07FSt-EeejvM4ms8yGow" outgoing="_rd07FCt-EeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Class"/>
+      </nodes>
+      <edges xmi:id="_rd07FCt-EeejvM4ms8yGow" source="_rd07Eyt-EeejvM4ms8yGow" target="_rd07Eit-EeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Class/encapsulates"/>
+      </edges>
+      <edges xmi:id="_rd07FSt-EeejvM4ms8yGow" source="_rd07Eit-EeejvM4ms8yGow" target="_rd07Eyt-EeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Feature/isEncapsulatedBy"/>
+      </edges>
+    </rhs>
+    <mappings xmi:id="_rd07Fit-EeejvM4ms8yGow" origin="_rd07CSt-EeejvM4ms8yGow" image="_rd07ESt-EeejvM4ms8yGow"/>
+    <mappings xmi:id="_rd07Fyt-EeejvM4ms8yGow" origin="_rd07Cyt-EeejvM4ms8yGow" image="_rd07Eit-EeejvM4ms8yGow"/>
+    <mappings xmi:id="_rd07GCt-EeejvM4ms8yGow" origin="_rd07DCt-EeejvM4ms8yGow" image="_rd07Eyt-EeejvM4ms8yGow"/>
+  </units>
+  <units xsi:type="henshin:PriorityUnit" xmi:id="_rd07GSt-EeejvM4ms8yGow" name="mainUnit" subUnits="_rd07Ayt-EeejvM4ms8yGow">
+    <parameters xmi:id="_rd07Git-EeejvM4ms8yGow" name="selectedEObject">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//ClassModel"/>
+    </parameters>
+    <parameters xmi:id="_rd07Gyt-EeejvM4ms8yGow" name="ToBeDeleted">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//Class"/>
+    </parameters>
+    <parameters xmi:id="_rd07HCt-EeejvM4ms8yGow" name="Existing">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//Feature"/>
+    </parameters>
+    <parameters xmi:id="_rd07HSt-EeejvM4ms8yGow" name="NewTarget">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//Class"/>
+    </parameters>
+    <parameterMappings xmi:id="_rd07Hit-EeejvM4ms8yGow" source="_rd07Git-EeejvM4ms8yGow" target="_rd07BCt-EeejvM4ms8yGow"/>
+    <parameterMappings xmi:id="_rd07Hyt-EeejvM4ms8yGow" source="_rd07Gyt-EeejvM4ms8yGow" target="_rd07BSt-EeejvM4ms8yGow"/>
+    <parameterMappings xmi:id="_rd07ICt-EeejvM4ms8yGow" source="_rd07HCt-EeejvM4ms8yGow" target="_rd07Bit-EeejvM4ms8yGow"/>
+    <parameterMappings xmi:id="_rd07ISt-EeejvM4ms8yGow" source="_rd07HSt-EeejvM4ms8yGow" target="_rd07Byt-EeejvM4ms8yGow"/>
+  </units>
+</henshin:Module>

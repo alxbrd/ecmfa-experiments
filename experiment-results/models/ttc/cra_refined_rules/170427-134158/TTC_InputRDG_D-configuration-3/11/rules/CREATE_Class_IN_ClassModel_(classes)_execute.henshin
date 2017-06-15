@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="ASCII"?>
+<henshin:Module xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:henshin="http://www.eclipse.org/emf/2011/Henshin" xmi:id="_GD80-CtrEeejvM4ms8yGow" name="CREATE_Class_IN_ClassModel_(classes)" description="Creates one Class in ClassModel">
+  <imports href="architectureCRA.ecore#/"/>
+  <units xsi:type="henshin:Rule" xmi:id="_GD80-StrEeejvM4ms8yGow" name="createClass_IN_ClassModel" description="creates one Class in the context: ClassModel">
+    <parameters xmi:id="_GD80-itrEeejvM4ms8yGow" name="Selected">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//ClassModel"/>
+    </parameters>
+    <parameters xmi:id="_GD80-ytrEeejvM4ms8yGow" name="Existing">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//Feature"/>
+    </parameters>
+    <parameters xmi:id="_GD80_CtrEeejvM4ms8yGow" name="New">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//Class"/>
+    </parameters>
+    <parameters xmi:id="_GD80_StrEeejvM4ms8yGow" name="Name">
+      <type xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </parameters>
+    <lhs xmi:id="_GD80_itrEeejvM4ms8yGow" name="Lhs">
+      <nodes xmi:id="_GD80_ytrEeejvM4ms8yGow" name="Selected">
+        <type href="architectureCRA.ecore#//ClassModel"/>
+      </nodes>
+      <nodes xmi:id="_GD81ACtrEeejvM4ms8yGow" name="Existing">
+        <type href="architectureCRA.ecore#//Feature"/>
+      </nodes>
+      <formula xsi:type="henshin:Not" xmi:id="_GD81AStrEeejvM4ms8yGow">
+        <child xsi:type="henshin:NestedCondition" xmi:id="_GD81AitrEeejvM4ms8yGow">
+          <conclusion xmi:id="_GD81AytrEeejvM4ms8yGow" name="ub0">
+            <nodes xmi:id="_GD81BCtrEeejvM4ms8yGow" name="" outgoing="_GD81BitrEeejvM4ms8yGow">
+              <type href="architectureCRA.ecore#//Feature"/>
+            </nodes>
+            <nodes xmi:id="_GD81BStrEeejvM4ms8yGow" name="" incoming="_GD81BitrEeejvM4ms8yGow">
+              <type href="architectureCRA.ecore#//Class"/>
+            </nodes>
+            <edges xmi:id="_GD81BitrEeejvM4ms8yGow" source="_GD81BCtrEeejvM4ms8yGow" target="_GD81BStrEeejvM4ms8yGow">
+              <type href="architectureCRA.ecore#//Feature/isEncapsulatedBy"/>
+            </edges>
+          </conclusion>
+          <mappings xmi:id="_GD81BytrEeejvM4ms8yGow" origin="_GD81ACtrEeejvM4ms8yGow" image="_GD81BCtrEeejvM4ms8yGow"/>
+        </child>
+      </formula>
+    </lhs>
+    <rhs xmi:id="_GD81CCtrEeejvM4ms8yGow" name="Rhs">
+      <nodes xmi:id="_GD81CStrEeejvM4ms8yGow" name="Selected" outgoing="_GD81DStrEeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//ClassModel"/>
+      </nodes>
+      <nodes xmi:id="_GD81CitrEeejvM4ms8yGow" name="New" incoming="_GD81DStrEeejvM4ms8yGow _GD81DytrEeejvM4ms8yGow" outgoing="_GD81DitrEeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Class"/>
+        <attributes xmi:id="_GD81CytrEeejvM4ms8yGow" value="Name">
+          <type href="architectureCRA.ecore#//NamedElement/name"/>
+        </attributes>
+      </nodes>
+      <nodes xmi:id="_GD81DCtrEeejvM4ms8yGow" name="Existing" incoming="_GD81DitrEeejvM4ms8yGow" outgoing="_GD81DytrEeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Feature"/>
+      </nodes>
+      <edges xmi:id="_GD81DStrEeejvM4ms8yGow" source="_GD81CStrEeejvM4ms8yGow" target="_GD81CitrEeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//ClassModel/classes"/>
+      </edges>
+      <edges xmi:id="_GD81DitrEeejvM4ms8yGow" source="_GD81CitrEeejvM4ms8yGow" target="_GD81DCtrEeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Class/encapsulates"/>
+      </edges>
+      <edges xmi:id="_GD81DytrEeejvM4ms8yGow" source="_GD81DCtrEeejvM4ms8yGow" target="_GD81CitrEeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Feature/isEncapsulatedBy"/>
+      </edges>
+    </rhs>
+    <mappings xmi:id="_GD81ECtrEeejvM4ms8yGow" origin="_GD80_ytrEeejvM4ms8yGow" image="_GD81CStrEeejvM4ms8yGow"/>
+    <mappings xmi:id="_GD81EStrEeejvM4ms8yGow" origin="_GD81ACtrEeejvM4ms8yGow" image="_GD81DCtrEeejvM4ms8yGow"/>
+  </units>
+  <units xsi:type="henshin:PriorityUnit" xmi:id="_GD81EitrEeejvM4ms8yGow" name="mainUnit" subUnits="_GD80-StrEeejvM4ms8yGow">
+    <parameters xmi:id="_GD81EytrEeejvM4ms8yGow" name="selectedEObject">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//ClassModel"/>
+    </parameters>
+    <parameters xmi:id="_GD81FCtrEeejvM4ms8yGow" name="Existing">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//Feature"/>
+    </parameters>
+    <parameters xmi:id="_GD81FStrEeejvM4ms8yGow" name="New">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//Class"/>
+    </parameters>
+    <parameters xmi:id="_GD81FitrEeejvM4ms8yGow" name="Name">
+      <type xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </parameters>
+    <parameterMappings xmi:id="_GD81FytrEeejvM4ms8yGow" source="_GD81EytrEeejvM4ms8yGow" target="_GD80-itrEeejvM4ms8yGow"/>
+    <parameterMappings xmi:id="_GD81GCtrEeejvM4ms8yGow" source="_GD81FCtrEeejvM4ms8yGow" target="_GD80-ytrEeejvM4ms8yGow"/>
+    <parameterMappings xmi:id="_GD81GStrEeejvM4ms8yGow" source="_GD80_CtrEeejvM4ms8yGow" target="_GD81FStrEeejvM4ms8yGow"/>
+    <parameterMappings xmi:id="_GD81GitrEeejvM4ms8yGow" source="_GD81FitrEeejvM4ms8yGow" target="_GD80_StrEeejvM4ms8yGow"/>
+  </units>
+</henshin:Module>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="ASCII"?>
+<henshin:Module xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:henshin="http://www.eclipse.org/emf/2011/Henshin" xmi:id="_c99IECtqEeejvM4ms8yGow" name="ADD_Class_(encapsulates)_TGT_Feature" description="Adds to Class's reference encapsulates the target Feature">
+  <imports href="architectureCRA.ecore#/"/>
+  <units xsi:type="henshin:Rule" xmi:id="_c99IEStqEeejvM4ms8yGow" name="addToClass_encapsulates_Feature" description="Adds to Class's reference encapsulates the target Feature">
+    <parameters xmi:id="_c99IEitqEeejvM4ms8yGow" name="Selected">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//Class"/>
+    </parameters>
+    <parameters xmi:id="_c99IEytqEeejvM4ms8yGow" name="NewTarget">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//Feature"/>
+    </parameters>
+    <lhs xmi:id="_c99IFCtqEeejvM4ms8yGow" name="Lhs">
+      <nodes xmi:id="_c99IFStqEeejvM4ms8yGow" name="Selected">
+        <type href="architectureCRA.ecore#//Class"/>
+      </nodes>
+      <nodes xmi:id="_c99IFitqEeejvM4ms8yGow" name="NewTarget">
+        <type href="architectureCRA.ecore#//Feature"/>
+      </nodes>
+      <formula xsi:type="henshin:Not" xmi:id="_c99IFytqEeejvM4ms8yGow">
+        <child xsi:type="henshin:NestedCondition" xmi:id="_c99IGCtqEeejvM4ms8yGow">
+          <conclusion xmi:id="_c99IGStqEeejvM4ms8yGow" name="ub0">
+            <nodes xmi:id="_c99IGitqEeejvM4ms8yGow" name="" outgoing="_c99IHCtqEeejvM4ms8yGow">
+              <type href="architectureCRA.ecore#//Feature"/>
+            </nodes>
+            <nodes xmi:id="_c99IGytqEeejvM4ms8yGow" name="" incoming="_c99IHCtqEeejvM4ms8yGow">
+              <type href="architectureCRA.ecore#//Class"/>
+            </nodes>
+            <edges xmi:id="_c99IHCtqEeejvM4ms8yGow" source="_c99IGitqEeejvM4ms8yGow" target="_c99IGytqEeejvM4ms8yGow">
+              <type href="architectureCRA.ecore#//Feature/isEncapsulatedBy"/>
+            </edges>
+          </conclusion>
+          <mappings xmi:id="_c99IHStqEeejvM4ms8yGow" origin="_c99IFitqEeejvM4ms8yGow" image="_c99IGitqEeejvM4ms8yGow"/>
+        </child>
+      </formula>
+    </lhs>
+    <rhs xmi:id="_c99IHitqEeejvM4ms8yGow" name="Rhs">
+      <nodes xmi:id="_c99IHytqEeejvM4ms8yGow" name="Selected" incoming="_c99IIitqEeejvM4ms8yGow" outgoing="_c99IIStqEeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Class"/>
+      </nodes>
+      <nodes xmi:id="_c99IICtqEeejvM4ms8yGow" name="NewTarget" incoming="_c99IIStqEeejvM4ms8yGow" outgoing="_c99IIitqEeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Feature"/>
+      </nodes>
+      <edges xmi:id="_c99IIStqEeejvM4ms8yGow" source="_c99IHytqEeejvM4ms8yGow" target="_c99IICtqEeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Class/encapsulates"/>
+      </edges>
+      <edges xmi:id="_c99IIitqEeejvM4ms8yGow" source="_c99IICtqEeejvM4ms8yGow" target="_c99IHytqEeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Feature/isEncapsulatedBy"/>
+      </edges>
+    </rhs>
+    <mappings xmi:id="_c99IIytqEeejvM4ms8yGow" origin="_c99IFStqEeejvM4ms8yGow" image="_c99IHytqEeejvM4ms8yGow"/>
+    <mappings xmi:id="_c99IJCtqEeejvM4ms8yGow" origin="_c99IFitqEeejvM4ms8yGow" image="_c99IICtqEeejvM4ms8yGow"/>
+  </units>
+  <units xsi:type="henshin:PriorityUnit" xmi:id="_c99IJStqEeejvM4ms8yGow" name="mainUnit" subUnits="_c99IEStqEeejvM4ms8yGow">
+    <parameters xmi:id="_c99IJitqEeejvM4ms8yGow" name="selectedEObject">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//Class"/>
+    </parameters>
+    <parameters xmi:id="_c99IJytqEeejvM4ms8yGow" name="NewTarget">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//Feature"/>
+    </parameters>
+    <parameterMappings xmi:id="_c99IKCtqEeejvM4ms8yGow" source="_c99IJitqEeejvM4ms8yGow" target="_c99IEitqEeejvM4ms8yGow"/>
+    <parameterMappings xmi:id="_c99IKStqEeejvM4ms8yGow" source="_c99IJytqEeejvM4ms8yGow" target="_c99IEytqEeejvM4ms8yGow"/>
+  </units>
+</henshin:Module>

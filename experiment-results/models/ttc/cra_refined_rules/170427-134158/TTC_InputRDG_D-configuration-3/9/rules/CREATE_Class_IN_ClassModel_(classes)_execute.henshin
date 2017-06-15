@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="ASCII"?>
+<henshin:Module xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:henshin="http://www.eclipse.org/emf/2011/Henshin" xmi:id="_DENtiitrEeejvM4ms8yGow" name="CREATE_Class_IN_ClassModel_(classes)" description="Creates one Class in ClassModel">
+  <imports href="architectureCRA.ecore#/"/>
+  <units xsi:type="henshin:Rule" xmi:id="_DENtiytrEeejvM4ms8yGow" name="createClass_IN_ClassModel" description="creates one Class in the context: ClassModel">
+    <parameters xmi:id="_DENtjCtrEeejvM4ms8yGow" name="Selected">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//ClassModel"/>
+    </parameters>
+    <parameters xmi:id="_DENtjStrEeejvM4ms8yGow" name="Existing">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//Feature"/>
+    </parameters>
+    <parameters xmi:id="_DENtjitrEeejvM4ms8yGow" name="New">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//Class"/>
+    </parameters>
+    <parameters xmi:id="_DENtjytrEeejvM4ms8yGow" name="Name">
+      <type xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </parameters>
+    <lhs xmi:id="_DENtkCtrEeejvM4ms8yGow" name="Lhs">
+      <nodes xmi:id="_DENtkStrEeejvM4ms8yGow" name="Selected">
+        <type href="architectureCRA.ecore#//ClassModel"/>
+      </nodes>
+      <nodes xmi:id="_DENtkitrEeejvM4ms8yGow" name="Existing">
+        <type href="architectureCRA.ecore#//Feature"/>
+      </nodes>
+      <formula xsi:type="henshin:Not" xmi:id="_DENtkytrEeejvM4ms8yGow">
+        <child xsi:type="henshin:NestedCondition" xmi:id="_DENtlCtrEeejvM4ms8yGow">
+          <conclusion xmi:id="_DENtlStrEeejvM4ms8yGow" name="ub0">
+            <nodes xmi:id="_DENtlitrEeejvM4ms8yGow" name="" outgoing="_DENtmCtrEeejvM4ms8yGow">
+              <type href="architectureCRA.ecore#//Feature"/>
+            </nodes>
+            <nodes xmi:id="_DENtlytrEeejvM4ms8yGow" name="" incoming="_DENtmCtrEeejvM4ms8yGow">
+              <type href="architectureCRA.ecore#//Class"/>
+            </nodes>
+            <edges xmi:id="_DENtmCtrEeejvM4ms8yGow" source="_DENtlitrEeejvM4ms8yGow" target="_DENtlytrEeejvM4ms8yGow">
+              <type href="architectureCRA.ecore#//Feature/isEncapsulatedBy"/>
+            </edges>
+          </conclusion>
+          <mappings xmi:id="_DENtmStrEeejvM4ms8yGow" origin="_DENtkitrEeejvM4ms8yGow" image="_DENtlitrEeejvM4ms8yGow"/>
+        </child>
+      </formula>
+    </lhs>
+    <rhs xmi:id="_DENtmitrEeejvM4ms8yGow" name="Rhs">
+      <nodes xmi:id="_DENtmytrEeejvM4ms8yGow" name="Selected" outgoing="_DENtnytrEeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//ClassModel"/>
+      </nodes>
+      <nodes xmi:id="_DENtnCtrEeejvM4ms8yGow" name="New" incoming="_DENtnytrEeejvM4ms8yGow _DENtoStrEeejvM4ms8yGow" outgoing="_DENtoCtrEeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Class"/>
+        <attributes xmi:id="_DENtnStrEeejvM4ms8yGow" value="Name">
+          <type href="architectureCRA.ecore#//NamedElement/name"/>
+        </attributes>
+      </nodes>
+      <nodes xmi:id="_DENtnitrEeejvM4ms8yGow" name="Existing" incoming="_DENtoCtrEeejvM4ms8yGow" outgoing="_DENtoStrEeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Feature"/>
+      </nodes>
+      <edges xmi:id="_DENtnytrEeejvM4ms8yGow" source="_DENtmytrEeejvM4ms8yGow" target="_DENtnCtrEeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//ClassModel/classes"/>
+      </edges>
+      <edges xmi:id="_DENtoCtrEeejvM4ms8yGow" source="_DENtnCtrEeejvM4ms8yGow" target="_DENtnitrEeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Class/encapsulates"/>
+      </edges>
+      <edges xmi:id="_DENtoStrEeejvM4ms8yGow" source="_DENtnitrEeejvM4ms8yGow" target="_DENtnCtrEeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Feature/isEncapsulatedBy"/>
+      </edges>
+    </rhs>
+    <mappings xmi:id="_DENtoitrEeejvM4ms8yGow" origin="_DENtkStrEeejvM4ms8yGow" image="_DENtmytrEeejvM4ms8yGow"/>
+    <mappings xmi:id="_DENtoytrEeejvM4ms8yGow" origin="_DENtkitrEeejvM4ms8yGow" image="_DENtnitrEeejvM4ms8yGow"/>
+  </units>
+  <units xsi:type="henshin:PriorityUnit" xmi:id="_DENtpCtrEeejvM4ms8yGow" name="mainUnit" subUnits="_DENtiytrEeejvM4ms8yGow">
+    <parameters xmi:id="_DENtpStrEeejvM4ms8yGow" name="selectedEObject">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//ClassModel"/>
+    </parameters>
+    <parameters xmi:id="_DENtpitrEeejvM4ms8yGow" name="Existing">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//Feature"/>
+    </parameters>
+    <parameters xmi:id="_DENtpytrEeejvM4ms8yGow" name="New">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//Class"/>
+    </parameters>
+    <parameters xmi:id="_DENtqCtrEeejvM4ms8yGow" name="Name">
+      <type xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </parameters>
+    <parameterMappings xmi:id="_DENtqStrEeejvM4ms8yGow" source="_DENtpStrEeejvM4ms8yGow" target="_DENtjCtrEeejvM4ms8yGow"/>
+    <parameterMappings xmi:id="_DENtqitrEeejvM4ms8yGow" source="_DENtpitrEeejvM4ms8yGow" target="_DENtjStrEeejvM4ms8yGow"/>
+    <parameterMappings xmi:id="_DENtqytrEeejvM4ms8yGow" source="_DENtjitrEeejvM4ms8yGow" target="_DENtpytrEeejvM4ms8yGow"/>
+    <parameterMappings xmi:id="_DENtrCtrEeejvM4ms8yGow" source="_DENtqCtrEeejvM4ms8yGow" target="_DENtjytrEeejvM4ms8yGow"/>
+  </units>
+</henshin:Module>

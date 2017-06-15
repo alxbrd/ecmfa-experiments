@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="ASCII"?>
+<henshin:Module xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:henshin="http://www.eclipse.org/emf/2011/Henshin" xmi:id="_O-IXECtqEeejvM4ms8yGow" name="REMOVE_Class_(encapsulates)_TGT_Feature_Refined" description="Removes Class's reference encapsulates the target Feature">
+  <imports href="architectureCRA.ecore#/"/>
+  <units xsi:type="henshin:Rule" xmi:id="_O-IXEStqEeejvM4ms8yGow" name="removeFromClass_encapsulates_Feature_refined" description="Removes from Class's reference encapsulates the target Feature">
+    <parameters xmi:id="_O-IXEitqEeejvM4ms8yGow" name="Selected">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//Class"/>
+    </parameters>
+    <parameters xmi:id="_O-IXEytqEeejvM4ms8yGow" name="OldTarget">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//Feature"/>
+    </parameters>
+    <parameters xmi:id="_O-IXFCtqEeejvM4ms8yGow" name="Selected#1">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//Class"/>
+    </parameters>
+    <lhs xmi:id="_O-IXFStqEeejvM4ms8yGow" name="LHS">
+      <nodes xmi:id="_O-IXFitqEeejvM4ms8yGow" name="Selected" incoming="_O-IXGitqEeejvM4ms8yGow" outgoing="_O-IXGStqEeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Class"/>
+      </nodes>
+      <nodes xmi:id="_O-IXFytqEeejvM4ms8yGow" name="OldTarget" incoming="_O-IXGStqEeejvM4ms8yGow" outgoing="_O-IXGitqEeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Feature"/>
+      </nodes>
+      <nodes xmi:id="_O-IXGCtqEeejvM4ms8yGow" name="Selected#1">
+        <type href="architectureCRA.ecore#//Class"/>
+      </nodes>
+      <edges xmi:id="_O-IXGStqEeejvM4ms8yGow" source="_O-IXFitqEeejvM4ms8yGow" target="_O-IXFytqEeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Class/encapsulates"/>
+      </edges>
+      <edges xmi:id="_O-IXGitqEeejvM4ms8yGow" source="_O-IXFytqEeejvM4ms8yGow" target="_O-IXFitqEeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Feature/isEncapsulatedBy"/>
+      </edges>
+      <formula xsi:type="henshin:NestedCondition" xmi:id="_O-IXGytqEeejvM4ms8yGow">
+        <conclusion xmi:id="_O-IXHCtqEeejvM4ms8yGow" name="lb0">
+          <nodes xmi:id="_O-IXHStqEeejvM4ms8yGow" name="" outgoing="_O-IXHytqEeejvM4ms8yGow">
+            <type href="architectureCRA.ecore#//Class"/>
+          </nodes>
+          <nodes xmi:id="_O-IXHitqEeejvM4ms8yGow" name="" incoming="_O-IXHytqEeejvM4ms8yGow">
+            <type href="architectureCRA.ecore#//Feature"/>
+          </nodes>
+          <edges xmi:id="_O-IXHytqEeejvM4ms8yGow" source="_O-IXHStqEeejvM4ms8yGow" target="_O-IXHitqEeejvM4ms8yGow">
+            <type href="architectureCRA.ecore#//Class/encapsulates"/>
+          </edges>
+        </conclusion>
+        <mappings xmi:id="_O-IXICtqEeejvM4ms8yGow" origin="_O-IXFitqEeejvM4ms8yGow" image="_O-IXHStqEeejvM4ms8yGow"/>
+      </formula>
+    </lhs>
+    <rhs xmi:id="_O-IXIStqEeejvM4ms8yGow" name="RHS">
+      <nodes xmi:id="_O-IXIitqEeejvM4ms8yGow" name="Selected">
+        <type href="architectureCRA.ecore#//Class"/>
+      </nodes>
+      <nodes xmi:id="_O-IXIytqEeejvM4ms8yGow" name="OldTarget" incoming="_O-IXJStqEeejvM4ms8yGow" outgoing="_O-IXJitqEeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Feature"/>
+      </nodes>
+      <nodes xmi:id="_O-IXJCtqEeejvM4ms8yGow" name="Selected#1" incoming="_O-IXJitqEeejvM4ms8yGow" outgoing="_O-IXJStqEeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Class"/>
+      </nodes>
+      <edges xmi:id="_O-IXJStqEeejvM4ms8yGow" source="_O-IXJCtqEeejvM4ms8yGow" target="_O-IXIytqEeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Class/encapsulates"/>
+      </edges>
+      <edges xmi:id="_O-IXJitqEeejvM4ms8yGow" source="_O-IXIytqEeejvM4ms8yGow" target="_O-IXJCtqEeejvM4ms8yGow">
+        <type href="architectureCRA.ecore#//Feature/isEncapsulatedBy"/>
+      </edges>
+    </rhs>
+    <mappings xmi:id="_O-IXJytqEeejvM4ms8yGow" origin="_O-IXFitqEeejvM4ms8yGow" image="_O-IXIitqEeejvM4ms8yGow"/>
+    <mappings xmi:id="_O-IXKCtqEeejvM4ms8yGow" origin="_O-IXFytqEeejvM4ms8yGow" image="_O-IXIytqEeejvM4ms8yGow"/>
+    <mappings xmi:id="_O-IXKStqEeejvM4ms8yGow" origin="_O-IXGCtqEeejvM4ms8yGow" image="_O-IXJCtqEeejvM4ms8yGow"/>
+  </units>
+  <units xsi:type="henshin:PriorityUnit" xmi:id="_O-IXKitqEeejvM4ms8yGow" name="mainUnit" subUnits="_O-IXEStqEeejvM4ms8yGow">
+    <parameters xmi:id="_O-IXKytqEeejvM4ms8yGow" name="selectedEObject">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//Class"/>
+    </parameters>
+    <parameters xmi:id="_O-IXLCtqEeejvM4ms8yGow" name="OldTarget">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//Feature"/>
+    </parameters>
+    <parameters xmi:id="_O-IXLStqEeejvM4ms8yGow" name="Selected#1">
+      <type xsi:type="ecore:EClass" href="architectureCRA.ecore#//Class"/>
+    </parameters>
+    <parameterMappings xmi:id="_O-IXLitqEeejvM4ms8yGow" source="_O-IXKytqEeejvM4ms8yGow" target="_O-IXEitqEeejvM4ms8yGow"/>
+    <parameterMappings xmi:id="_O-IXLytqEeejvM4ms8yGow" source="_O-IXLCtqEeejvM4ms8yGow" target="_O-IXEytqEeejvM4ms8yGow"/>
+    <parameterMappings xmi:id="_O-IXMCtqEeejvM4ms8yGow" source="_O-IXLStqEeejvM4ms8yGow" target="_O-IXFCtqEeejvM4ms8yGow"/>
+  </units>
+</henshin:Module>
